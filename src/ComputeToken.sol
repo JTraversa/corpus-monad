@@ -7,28 +7,32 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /// @title ComputeToken
-/// @notice Redeemable compute on Monad. Each token id is one VM size on the corpus platform (Fly-modeled sizes:
-/// shared-cpu-1x 1 GB and so on) for one fixed term, and one token is one VM-term. Minting is the payment: the
-/// buyer pays the catalog price in USDC, the USDC goes to the corpus treasury (and from there into the Monad
-/// lending vault; see treasury/), and the buyer holds a transferable claim. Redeeming burns the token and emits
-/// `Redeemed` with a reference to the corpus account that should receive the machine; the corpus watcher
-/// indexes that event and provisions the VM. Between mint and redeem the token is an ordinary ERC-1155 and
-/// can be held, sent or sold.
+/// @notice Permanently funded compute on Monad, as a token. Each token id is one VM size on the corpus platform
+/// (Fly-modeled sizes: shared-cpu-1x 1 GB and so on), and one token is one permanently funded machine of that
+/// size: a corpus position whose principal is never spent and whose yield pays the monthly bill for as long as
+/// the position is open. The price is corpus's own underwriting, `P = k · C / r` (monthly cost C, yield rate r,
+/// buffer k), split into a principal that throws off exactly the bill and a buffer that absorbs a bad stretch of
+/// yield; both halves are recorded here so the on-chain record matches the corpus ledger. Minting is the
+/// payment: the buyer pays the price in USDC, the USDC goes to the corpus treasury (and from there into the
+/// Monad lending vault; see treasury/), and the buyer holds a transferable claim. Redeeming burns the token
+/// and emits `Redeemed` with a reference to the corpus account that should receive the position; the corpus
+/// watcher indexes that event and opens it. Between mint and redeem the token is an ordinary ERC-1155 and can
+/// be held, sent or sold.
 ///
-/// `totalSupply(id)` is the outstanding liability for that size, in VM-terms. The operator sets prices from
+/// `totalSupply(id)` is the outstanding liability for that size, in machines. The operator registers sizes from
 /// the corpus catalog; a later version can price GPU sizes from FixingOracle instead.
 contract ComputeToken is ERC1155, ERC1155Supply {
     using SafeERC20 for IERC20;
 
-    struct VmType { string slug; string label; uint32 termDays; uint256 priceUsdc; bool active; }
+    struct VmType { string slug; string label; uint256 monthlyUsdc; uint256 principalUsdc; uint256 priceUsdc; bool active; }
 
     IERC20 public immutable usdc;   // 6 decimals
     address public operator;        // corpus platform
     address public treasury;        // receives mint payments
     VmType[] public types;          // id = index
 
-    event TypeRegistered(uint256 indexed id, string slug, string label, uint32 termDays, uint256 priceUsdc);
-    event PriceSet(uint256 indexed id, uint256 priceUsdc, bool active);
+    event TypeRegistered(uint256 indexed id, string slug, string label, uint256 monthlyUsdc, uint256 principalUsdc, uint256 priceUsdc);
+    event PriceSet(uint256 indexed id, uint256 monthlyUsdc, uint256 principalUsdc, uint256 priceUsdc, bool active);
     event Minted(address indexed buyer, uint256 indexed id, uint256 qty, uint256 paidUsdc);
     event Redeemed(address indexed holder, uint256 indexed id, uint256 qty, bytes32 indexed accountRef);
 
@@ -36,6 +40,7 @@ contract ComputeToken is ERC1155, ERC1155Supply {
     error UnknownType();
     error Inactive();
     error ZeroQty();
+    error BadPrice();
 
     modifier onlyOperator() { if (msg.sender != operator) revert NotOperator(); _; }
 
@@ -43,20 +48,24 @@ contract ComputeToken is ERC1155, ERC1155Supply {
         usdc = usdc_; operator = msg.sender; treasury = treasury_;
     }
 
-    /// @notice Register a VM size. `priceUsdc` is the catalog price for one term, in 6-decimal USDC.
-    function registerType(string calldata slug, string calldata label, uint32 termDays, uint256 priceUsdc) external onlyOperator returns (uint256 id) {
-        types.push(VmType({ slug: slug, label: label, termDays: termDays, priceUsdc: priceUsdc, active: true }));
+    /// @notice Register a VM size. All amounts are 6-decimal USDC: `monthlyUsdc` is the catalog bill the position
+    /// funds, `principalUsdc` the never-spent half, `priceUsdc` what the buyer pays (principal plus buffer).
+    function registerType(string calldata slug, string calldata label, uint256 monthlyUsdc, uint256 principalUsdc, uint256 priceUsdc) external onlyOperator returns (uint256 id) {
+        if (priceUsdc < principalUsdc) revert BadPrice();
+        types.push(VmType({ slug: slug, label: label, monthlyUsdc: monthlyUsdc, principalUsdc: principalUsdc, priceUsdc: priceUsdc, active: true }));
         id = types.length - 1;
-        emit TypeRegistered(id, slug, label, termDays, priceUsdc);
+        emit TypeRegistered(id, slug, label, monthlyUsdc, principalUsdc, priceUsdc);
     }
 
-    function setPrice(uint256 id, uint256 priceUsdc, bool active) external onlyOperator {
+    /// @notice Re-underwrite a size for NEW mints. Existing tokens are unaffected: a token is a claim on a machine, not on a price.
+    function setPrice(uint256 id, uint256 monthlyUsdc, uint256 principalUsdc, uint256 priceUsdc, bool active) external onlyOperator {
         if (id >= types.length) revert UnknownType();
-        types[id].priceUsdc = priceUsdc; types[id].active = active;
-        emit PriceSet(id, priceUsdc, active);
+        if (priceUsdc < principalUsdc) revert BadPrice();
+        types[id].monthlyUsdc = monthlyUsdc; types[id].principalUsdc = principalUsdc; types[id].priceUsdc = priceUsdc; types[id].active = active;
+        emit PriceSet(id, monthlyUsdc, principalUsdc, priceUsdc, active);
     }
 
-    /// @notice Buy `qty` VM-terms of size `id`. The caller must have approved `qty × price` USDC.
+    /// @notice Buy `qty` permanently funded machines of size `id`. The caller must have approved `qty × price` USDC.
     function mint(uint256 id, uint256 qty) external returns (uint256 paid) {
         if (id >= types.length) revert UnknownType();
         if (!types[id].active) revert Inactive();
@@ -67,7 +76,7 @@ contract ComputeToken is ERC1155, ERC1155Supply {
         emit Minted(msg.sender, id, qty, paid);
     }
 
-    /// @notice Burn `qty` tokens of size `id` and ask corpus to provision that many machines for `accountRef`
+    /// @notice Burn `qty` tokens of size `id` and ask corpus to open that many positions for `accountRef`
     /// (the keccak256 of the corpus account id, or any reference the platform agreed with the holder).
     function redeem(uint256 id, uint256 qty, bytes32 accountRef) external {
         if (id >= types.length) revert UnknownType();

@@ -7,13 +7,13 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <title>corpusAI on Monad · Compute you can hold</title>
-<meta name="description" content="corpusAI on Monad: mint a corpus VM as a token in USDC, hold or trade it, redeem it for the machine. Underneath, a verifiable compute price oracle, x402 payments for prices on Monad, and a treasury that puts the float to work in Monad DeFi." />
+<meta name="description" content="corpusAI on Monad: mint a permanently funded corpus VM as a token in USDC, hold or trade it, redeem it for the machine. Underneath, a verifiable compute price oracle, x402 payments for prices on Monad, and a treasury that puts the float to work in Monad DeFi." />
 <link rel="canonical" href="https://hackathon.trycorpus.ai/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="corpusAI" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:title" content="corpusAI on Monad · Compute you can hold" />
-<meta property="og:description" content="Mint a corpus VM as a token in USDC on Monad, hold or trade it, redeem it for the machine. A Monad Metropolis submission." />
+<meta property="og:description" content="Mint a permanently funded corpus VM as a token in USDC on Monad, hold or trade it, redeem it for the machine. A Monad Metropolis submission." />
 <meta property="og:url" content="https://hackathon.trycorpus.ai/" />
 <meta property="og:image" content="https://hackathon.trycorpus.ai/og.jpg" />
 <meta property="og:image:alt" content="The corpusAI mark, a ring around a green square." />
@@ -43,7 +43,7 @@
 <section class="hero"><div class="wrap">
   <p class="eyebrow">Monad Metropolis · Track 4 · Trust, identity and AI infrastructure</p>
   <h1>Compute<br>you can hold.</h1>
-  <p class="hero-lead">Mint a corpus VM as a token in USDC on Monad. Hold it, send it, sell it, or redeem it for the machine. Underneath: a compute price oracle any contract can verify, x402 payments for prices settled on Monad, and a treasury that puts the float to work in Monad DeFi.</p>
+  <p class="hero-lead">Mint a permanently funded corpus machine as a token in USDC on Monad: one payment, a principal that is never spent, a yield that pays the bill forever. Hold it, send it, sell it, or redeem it for the machine. Underneath: a compute price oracle any contract can verify, x402 payments for prices settled on Monad, and a treasury that puts the float to work in Monad DeFi.</p>
   <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">Read the code</a><a class="btn ghost" href="https://cloud.trycorpus.ai">The price feed</a></div>
 </div></section>
 
@@ -62,7 +62,7 @@
   <div class="steps">
     <div class="step"><div class="step-n">[ 01 ]</div><h3>Pay for prices</h3><p>cloud.trycorpus.ai serves spot, on-demand, reserved and GPU prices across providers, 29 priced endpoints and 35 MCP tools. Every 402 carries a USDC offer on Monad, settled by the Monad facilitator with no API key on either side. An agent pays a cent, gets the price back signed.</p><a href="https://cloud.trycorpus.ai/x402">How x402 works on the feed</a></div>
     <div class="step"><div class="step-n">[ 02 ]</div><h3>Verify them on chain</h3><p>Each day the feed publishes index fixings, EIP-712 signed by the corpusAI publisher key and attested on chain. FixingOracle on Monad checks that signature, so anyone can relay a fixing and nobody can forge one. Any contract can read the H100 price.</p><a href="https://cloud.trycorpus.ai/governance">Governance and the signing scheme</a></div>
-    <div class="step"><div class="step-n">[ 03 ]</div><h3>Mint compute</h3><p>ComputeToken is an ERC-1155 where one token is one corpus VM for 30 days. Minting is the payment: the catalog price in USDC goes to the treasury, the buyer holds a transferable claim. Redeeming burns it and tells corpus which account gets the machine.</p><a href="/mint">Mint a VM-term</a></div>
+    <div class="step"><div class="step-n">[ 03 ]</div><h3>Mint compute</h3><p>ComputeToken is an ERC-1155 where one token is one permanently funded corpus machine, priced by corpus's own underwriting: principal plus buffer, so the yield covers the bill. Minting is the payment in USDC; the buyer holds a transferable claim. Redeeming burns it and tells corpus which account gets the position.</p><a href="/mint">Mint a machine</a></div>
     <div class="step"><div class="step-n">[ 04 ]</div><h3>Put the float to work</h3><p>Mint payments land in the treasury and are swept into a curated USDC lending vault on Morpho, with Aave v3 as fallback, instead of sitting idle. The yield subsidises the compute. Withdraw when the hosting bills fall due.</p><a href="https://github.com/JTraversa/corpus-monad/tree/main/treasury">The treasury sweep</a></div>
   </div>
 </div></section>
@@ -74,8 +74,8 @@
   <div class="flow">
     <div class="fl"><b>price</b><span>An agent asks the feed for a price and pays the 402 in USDC on Monad. The answer carries the publisher's signature.</span><code>GET /v1/index/fixing → 402 → eip155:143</code></div>
     <div class="fl"><b>verify</b><span>Anyone posts the signed fixing to FixingOracle. The contract recovers the signer and stores the value under its day.</span><code>oracle.post(fixing, sig) · latest("CX.H100SXM.NEO")</code></div>
-    <div class="fl"><b>mint</b><span>A buyer picks a VM size and pays the catalog price. The token is minted to their wallet; the USDC goes to the treasury.</span><code>token.mint(id, qty) → Minted</code></div>
-    <div class="fl"><b>redeem</b><span>The holder burns the token naming a corpus account. corpus indexes the event and provisions the machine. The float earned yield in the meantime.</span><code>token.redeem(id, qty, accountRef) → Redeemed</code></div>
+    <div class="fl"><b>mint</b><span>A buyer picks a VM size and pays principal plus buffer, once. The token is minted to their wallet; the USDC goes to the treasury.</span><code>token.mint(id, qty) → Minted</code></div>
+    <div class="fl"><b>redeem</b><span>The holder burns the token naming a corpus account. corpus opens the position and the principal's yield pays the machine's bill from then on.</span><code>token.redeem(id, qty, accountRef) → Redeemed</code></div>
   </div>
   <p class="band-note">Why Monad: 400 ms blocks and sub-second finality make per-call settlement feel like an ordinary API round trip, and the USDC agents pay with is the same asset Morpho, Aave and Euler lend on Monad, so the float never has to leave the chain.</p>
 </div></div></section>
@@ -104,15 +104,15 @@
     <div class="g"><div class="g-c"><i></i>Built in the window</div><div class="g-m">The Monad x402 rail on the feed (1 Oct), EIP-712 fixing signatures and daily attestations (27 Sep), the hosted MCP server, FixingOracle, ComputeToken, the mint page, the clients and the treasury sweep (10 to 13 Oct 2026).</div></div>
     <div class="g"><div class="g-c"><i></i>Pre-existing foundation</div><div class="g-m">The corpusAI Cloud Pricing feed (collectors, archive, index methodology, API) and the corpus compute platform on Ethereum with its deposit flow predate the hackathon. Everything here consumes the feed as an external service and points the existing deposit flow at Monad.</div></div>
     <div class="g"><div class="g-c"><i></i>Not yet built</div><div class="g-m">The corpus-api side of redemption: the wallet-to-account link, a VM-terms ledger beside the USD ledger, and the watcher that indexes <code>Redeemed</code> and provisions the machine. Also secondary liquidity, price hedging for GPU sizes, and the legal treatment of a tradeable claim on a service.</div></div>
-    <div class="g"><div class="g-c"><i></i>Why Fly-sized VMs first</div><div class="g-m">Their price is a catalog number set by corpus, so none of the GPU forward dynamics apply yet. The oracle is the public price reference for the GPU sizes that come next.</div></div>
+    <div class="g"><div class="g-c"><i></i>Why Fly-sized VMs first</div><div class="g-m">Their bill is a catalog number set by corpus, and the position price follows from corpus's underwriting (k = 1.15, r = 7.24%), so none of the GPU forward dynamics apply yet. The oracle is the public price reference for the GPU sizes that come next.</div></div>
     <div class="g"><div class="g-c"><i></i>Team and tools</div><div class="g-m">Julian Traversa and Alexandra, one team, one submission. Developed with AI assistance (Claude Code) under the team's direction; every design decision, key and deployment is the team's.</div></div>
   </div>
 </div></section>
 
 <section class="wrap"><div class="cta">
   <p class="eyebrow">Try it</p>
-  <h2>Mint one VM-term for $5.70.</h2>
-  <p class="lead">A shared-cpu-1x with 1 GB for 30 days, paid in USDC on Monad. Then send it to a friend, or redeem it.</p>
+  <h2>Mint a machine that funds itself.</h2>
+  <p class="lead">A shared-cpu-1x with 1 GB costs $5.70 a month. Its permanent position is $1,086.46, paid once in USDC on Monad. Then send it to a friend, or redeem it.</p>
   <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">GitHub</a></div>
 </div></section>
 
@@ -123,7 +123,7 @@
     <div class="f-col"><h4>corpusAI Cloud Pricing</h4><ul><li><a href="https://cloud.trycorpus.ai/charts">Charts</a></li><li><a href="https://cloud.trycorpus.ai/docs">API</a></li><li><a href="https://cloud.trycorpus.ai/x402">Pay per request (x402)</a></li><li><a href="https://cloud.trycorpus.ai/governance">Governance</a></li></ul></div>
     <div class="f-col"><h4>Contact</h4><ul><li><a href="mailto:hello@trycorpus.ai">hello@trycorpus.ai</a></li><li><a href="https://www.trycorpus.ai/terms">Terms</a></li><li><a href="https://www.trycorpus.ai/privacy">Privacy</a></li></ul></div>
   </div>
-  <div class="f-bottom"><p class="legal">© 2026 corpusAI. A hackathon submission: the token is a proof of concept on Fly-sized machines, and nothing on this page is an offer to sell a security or a commodity contract.</p><p class="built">Built by <a href="https://x.com/TraversaJulian">Julian Traversa</a> and Alexandra</p></div>
+  <div class="f-bottom"><p class="legal">© 2026 corpusAI. A hackathon submission: the token is a proof of concept on Fly-sized machines, the yearly rate positions are priced at is not a quote or a guarantee, and nothing on this page is an offer to sell a security or a commodity contract.</p><p class="built">Built by <a href="https://x.com/TraversaJulian">Julian Traversa</a> and Alexandra</p></div>
 </div></footer>
 
 <script type="module">

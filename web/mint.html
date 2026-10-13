@@ -7,7 +7,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <title>Mint compute · corpusAI on Monad</title>
-<meta name="description" content="Mint a corpus VM as a token in USDC on Monad. One token is one VM of that size for 30 days. Hold it, send it, or redeem it to your corpus account." />
+<meta name="description" content="Mint a permanently funded corpus VM as a token in USDC on Monad. One token is one machine whose principal is never spent and whose yield pays the bill. Hold it, send it, or redeem it to your corpus account." />
 <link rel="canonical" href="https://hackathon.trycorpus.ai/mint" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="corpusAI" />
@@ -41,7 +41,7 @@
 <section class="hero" style="padding-bottom:28px"><div class="wrap">
   <p class="eyebrow">Mint compute</p>
   <h1 style="font-size:clamp(34px,5.6vw,88px)">A machine,<br>as a token.</h1>
-  <p class="hero-lead">One token is one corpus VM of that size for 30 days, paid at the catalog price in USDC on Monad. The USDC goes to the treasury and earns yield in the vault until the machine is provisioned. Hold the token, send it, or redeem it to a corpus account.</p>
+  <p class="hero-lead">One token is one permanently funded corpus machine: a position whose principal is never spent and whose yield pays the monthly bill for as long as it is open. The price is corpus's own underwriting, principal plus a buffer, paid once in USDC on Monad. Hold the token, send it, or redeem it to a corpus account.</p>
 </div></section>
 
 <section class="wrap" style="padding-bottom:clamp(64px,9vw,120px)">
@@ -53,10 +53,10 @@
   <div class="mint-grid">
     <div class="panel">
       <h3>Sizes</h3>
-      <p>Fly-modeled machine sizes at the corpus catalog price. Outstanding is the number of VM-terms minted and not yet redeemed.</p>
+      <p>Fly-modeled machine sizes, priced as permanent positions: <span class="mono">price = k · C / r</span> with the monthly bill C, yield rate r of 7.24% and buffer k of 1.15, exactly as corpus quotes them. Outstanding is the number of machines minted and not yet redeemed.</p>
       <div class="tbl-wrap" style="margin-top:16px;border-radius:12px"><table id="sizes">
-        <thead><tr><th>Size</th><th class="num">Price / 30 d</th><th class="num">Outstanding</th><th class="num">You hold</th><th></th></tr></thead>
-        <tbody id="rows"><tr><td colspan="5" class="addr">Waiting for the token address…</td></tr></tbody>
+        <thead><tr><th>Size</th><th class="num">Monthly bill</th><th class="num">Price, once</th><th class="num">Outstanding</th><th class="num">You hold</th><th></th></tr></thead>
+        <tbody id="rows"><tr><td colspan="6" class="addr">Waiting for the token address…</td></tr></tbody>
       </table></div>
       <p class="note" id="token-note"></p>
     </div>
@@ -72,7 +72,7 @@
       </div>
       <div class="panel" style="margin-top:20px">
         <h3>Redeem</h3>
-        <p>Burn tokens and name the corpus account that should receive the machines. corpus indexes the event and provisions.</p>
+        <p>Burn tokens and name the corpus account that should receive the positions. corpus indexes the event and opens them.</p>
         <div class="field"><label>Size</label><select id="r-id"></select></div>
         <div class="row" style="margin-top:14px">
           <div class="field" style="flex:0 0 90px;margin-top:0"><label>Quantity</label><input id="r-qty" type="number" min="1" value="1"></div>
@@ -86,10 +86,10 @@
   <div class="log" id="log">Connect a wallet on Monad to mint. Nothing here moves without your signature.</div>
 
   <div class="steps" style="margin-top:40px">
-    <div class="step"><div class="step-n">[ 01 ]</div><h3>Pay once</h3><p>The mint is the payment. The catalog price in USDC goes straight to the corpus treasury on Monad, where it is swept into the lending vault.</p></div>
-    <div class="step"><div class="step-n">[ 02 ]</div><h3>Hold a claim</h3><p>The token is an ordinary ERC-1155. It sits in your wallet, can be sent to anyone, and can be sold. Supply per size is the outstanding liability.</p></div>
-    <div class="step"><div class="step-n">[ 03 ]</div><h3>Redeem when ready</h3><p>Burn it naming a corpus account. The <code>Redeemed</code> event is the instruction to provision; corpus indexes it the way it indexes deposits.</p></div>
-    <div class="step"><div class="step-n">[ 04 ]</div><h3>Not yet wired</h3><p>The corpus-api side of redemption is the next step after the hackathon. Today a redeem is a real burn and a real event; the machine is provisioned by hand.</p></div>
+    <div class="step"><div class="step-n">[ 01 ]</div><h3>Pay once</h3><p>The mint is the payment. Principal plus buffer in USDC goes straight to the corpus treasury on Monad, where it is swept into the lending vault and starts earning.</p></div>
+    <div class="step"><div class="step-n">[ 02 ]</div><h3>Hold a claim</h3><p>The token is an ordinary ERC-1155 backed by a principal that is never spent. It sits in your wallet, can be sent to anyone, and can be sold. Supply per size is the outstanding liability.</p></div>
+    <div class="step"><div class="step-n">[ 03 ]</div><h3>Redeem when ready</h3><p>Burn it naming a corpus account. The <code>Redeemed</code> event is the instruction to open the position; corpus indexes it the way it indexes deposits, and the yield pays the bill from then on.</p></div>
+    <div class="step"><div class="step-n">[ 04 ]</div><h3>Not yet wired</h3><p>The corpus-api side of redemption is the next step after the hackathon. Today a redeem is a real burn and a real event; the position is opened by hand.</p></div>
   </div>
 </section>
 
@@ -100,7 +100,7 @@
     <div class="f-col"><h4>corpusAI Cloud Pricing</h4><ul><li><a href="https://cloud.trycorpus.ai/charts">Charts</a></li><li><a href="https://cloud.trycorpus.ai/docs">API</a></li><li><a href="https://cloud.trycorpus.ai/x402">Pay per request (x402)</a></li></ul></div>
     <div class="f-col"><h4>Contact</h4><ul><li><a href="mailto:hello@trycorpus.ai">hello@trycorpus.ai</a></li><li><a href="https://www.trycorpus.ai/terms">Terms</a></li><li><a href="https://www.trycorpus.ai/privacy">Privacy</a></li></ul></div>
   </div>
-  <div class="f-bottom"><p class="legal">© 2026 corpusAI. A hackathon proof of concept on Fly-sized machines. Nothing on this page is an offer to sell a security or a commodity contract.</p><p class="built">Built by <a href="https://x.com/TraversaJulian">Julian Traversa</a> and Alexandra</p></div>
+  <div class="f-bottom"><p class="legal">© 2026 corpusAI. A hackathon proof of concept on Fly-sized machines; the yearly rate positions are priced at is not a quote or a guarantee. Nothing on this page is an offer to sell a security or a commodity contract.</p><p class="built">Built by <a href="https://x.com/TraversaJulian">Julian Traversa</a> and Alexandra</p></div>
 </div></footer>
 
 <script type="module">
@@ -109,7 +109,7 @@ import { createPublicClient, createWalletClient, custom, http, parseAbi, formatU
 const q = new URLSearchParams(location.search);
 const TOKEN = q.get('token') || CONFIG.token;
 const chain = { id: CONFIG.chainId, name: CONFIG.chainName, nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [CONFIG.rpc] } }, blockExplorers: { default: { name: 'Monad Explorer', url: CONFIG.explorer } } };
-const abi = parseAbi(['function usdc() view returns (address)','function typeCount() view returns (uint256)','function types(uint256) view returns (string,string,uint32,uint256,bool)','function totalSupply(uint256) view returns (uint256)','function balanceOf(address,uint256) view returns (uint256)','function mint(uint256,uint256) returns (uint256)','function redeem(uint256,uint256,bytes32)']);
+const abi = parseAbi(['function usdc() view returns (address)','function typeCount() view returns (uint256)','function types(uint256) view returns (string,string,uint256,uint256,uint256,bool)','function totalSupply(uint256) view returns (uint256)','function balanceOf(address,uint256) view returns (uint256)','function mint(uint256,uint256) returns (uint256)','function redeem(uint256,uint256,bytes32)']);
 const erc20 = parseAbi(['function allowance(address,address) view returns (uint256)','function approve(address,uint256) returns (bool)','function balanceOf(address) view returns (uint256)']);
 const pub = createPublicClient({ chain, transport: http(CONFIG.rpc) });
 const $ = (s) => document.querySelector(s); let wal, me, types = [];
@@ -121,8 +121,9 @@ const CATALOG = [['s1-256','shared-cpu-1x 256 MB',319],['s1-512','shared-cpu-1x 
 if (!TOKEN) {
   $('#token-note').textContent = 'The ComputeToken contract is not deployed yet. Prices shown are the corpus catalog the contract is registered with; minting opens with the deployment.';
   log('ComputeToken is not deployed yet. The sizes and prices below are what the contract registers at deployment.');
-  types = CATALOG.map(([slug, label, cents], id) => ({ id, slug, label, term: 30, price: BigInt(cents) * 10000n, active: false, supply: 0n, held: 0n }));
-  $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · 30 days</div></td><td class="num">${money(t.price)}</td><td class="num">—</td><td class="num tr-hold zero">0</td><td class="num"><button class="btn sm" disabled>Mint</button></td></tr>`).join('');
+  const split = (cents) => { const annual = BigInt(cents) * 12n; const r = (a, b) => (a + b / 2n) / b; return { principal: r(annual * 10000n, 724n) * 10000n, price: r(annual * 11500n, 724n) * 10000n }; };
+  types = CATALOG.map(([slug, label, cents], id) => ({ id, slug, label, monthly: BigInt(cents) * 10000n, ...split(cents), active: false, supply: 0n, held: 0n }));
+  $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">—</td><td class="num tr-hold zero">0</td><td class="num"><button class="btn sm" disabled>Mint</button></td></tr>`).join('');
   const opts = types.map((t) => `<option value="${t.id}">${t.label} · ${money(t.price)}</option>`).join(''); $('#m-id').innerHTML = opts; $('#r-id').innerHTML = opts; $('#m-id').value = '2'; $('#r-id').value = '2'; total();
 }
 else $('#token-note').innerHTML = `ComputeToken <a href="${CONFIG.explorer}/address/${TOKEN}" class="mono">${TOKEN}</a> on ${CONFIG.chainName}.`;
@@ -135,9 +136,9 @@ async function load() {
       pub.readContract({ address: TOKEN, abi, functionName: 'types', args: [BigInt(id)] }),
       pub.readContract({ address: TOKEN, abi, functionName: 'totalSupply', args: [BigInt(id)] }),
       me ? pub.readContract({ address: TOKEN, abi, functionName: 'balanceOf', args: [me, BigInt(id)] }) : Promise.resolve(0n)]);
-    types.push({ id, slug: t[0], label: t[1], term: t[2], price: t[3], active: t[4], supply: s, held: b });
+    types.push({ id, slug: t[0], label: t[1], monthly: t[2], principal: t[3], price: t[4], active: t[5], supply: s, held: b });
   }
-  $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · ${t.term} days</div></td><td class="num">${money(t.price)}</td><td class="num">${t.supply}</td><td class="num tr-hold ${t.held === 0n ? 'zero' : ''}">${t.held}</td><td class="num"><button class="btn sm" data-id="${t.id}" ${me && t.active ? '' : 'disabled'}>Mint</button></td></tr>`).join('');
+  $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">${t.supply}</td><td class="num tr-hold ${t.held === 0n ? 'zero' : ''}">${t.held}</td><td class="num"><button class="btn sm" data-id="${t.id}" ${me && t.active ? '' : 'disabled'}>Mint</button></td></tr>`).join('');
   document.querySelectorAll('button[data-id]').forEach((b) => b.onclick = () => { $('#m-id').value = b.dataset.id; total(); mint(); });
   const opts = types.map((t) => `<option value="${t.id}">${t.label} · ${money(t.price)}</option>`).join('');
   const keepM = $('#m-id').value, keepR = $('#r-id').value;
@@ -161,7 +162,7 @@ async function mint() { try {
   const allowance = await pub.readContract({ address: usdc, abi: erc20, functionName: 'allowance', args: [me, TOKEN] });
   let approveTx; if (allowance < cost) approveTx = await send({ address: usdc, abi: erc20, functionName: 'approve', args: [TOKEN, cost] }, 'Approval');
   const tx = await send({ address: TOKEN, abi, functionName: 'mint', args: [BigInt(t.id), qty] }, 'Mint');
-  log(`Minted ${qty} × ${t.label} for ${money(cost)}.${approveTx ? ' Approval ' + txLink(approveTx) + '.' : ''} Mint ${txLink(tx)}. The USDC is in the treasury; the token is in your wallet.`); load();
+  log(`Minted ${qty} × ${t.label} for ${money(cost)}.${approveTx ? ' Approval ' + txLink(approveTx) + '.' : ''} Mint ${txLink(tx)}. The principal and buffer are in the treasury; the token is in your wallet.`); load();
 } catch (e) { log('Error: ' + (e.shortMessage || e.message)); } }
 $('#mint').onclick = mint;
 $('#redeem').onclick = async () => { try {
@@ -170,7 +171,7 @@ $('#redeem').onclick = async () => { try {
   if (t.held < qty) return log(`You hold ${t.held} of ${t.label}.`);
   const ref = keccak256(toHex(acct));
   const tx = await send({ address: TOKEN, abi, functionName: 'redeem', args: [BigInt(t.id), qty, ref] }, 'Redeem');
-  log(`Redeemed ${qty} × ${t.label} to account reference <span class="mono">${ref.slice(0, 18)}…</span>. ${txLink(tx)}. corpus provisions the machine from this event.`); load();
+  log(`Redeemed ${qty} × ${t.label} to account reference <span class="mono">${ref.slice(0, 18)}…</span>. ${txLink(tx)}. corpus opens the position from this event.`); load();
 } catch (e) { log('Error: ' + (e.shortMessage || e.message)); } };
 $('#connect').onclick = async () => { try {
   if (!window.ethereum) return log('No wallet found. Install a browser wallet that supports custom EVM chains, then reload.');

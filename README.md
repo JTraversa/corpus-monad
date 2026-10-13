@@ -1,18 +1,18 @@
 # corpusAI on Monad
 
-Redeemable, transferable compute on Monad: mint a corpus VM as a token in USDC, hold or trade it, redeem it for the machine. Underneath: a verifiable compute price oracle, x402 payments for prices in USDC on Monad, and a treasury that puts the float to work in Monad DeFi. Built for the Monad Metropolis hackathon, Track 4 (Trust, Identity and AI Infrastructure).
+Redeemable, transferable compute on Monad: mint a permanently funded corpus VM as a token in USDC, hold or trade it, redeem it for the machine. Underneath: a verifiable compute price oracle, x402 payments for prices in USDC on Monad, and a treasury that puts the float to work in Monad DeFi. Built for the Monad Metropolis hackathon, Track 4 (Trust, Identity and AI Infrastructure).
 
 **What it is.** Agents already pay [corpusAI Cloud Pricing](https://cloud.trycorpus.ai) per call for cloud, GPU and LLM token prices over x402. Since 1 October 2026 those calls settle in USDC on Monad through Monad's facilitator, and every index fixing the feed serves carries an EIP-712 signature by the corpusAI publisher key plus a daily on-chain attestation of the whole fixing set. This repository is the Monad side of that system:
 
 - `src/FixingOracle.sol`: verifies publisher-signed fixings on Monad and stores them so any contract can read a GPU-hour price (`latest("CX.H100SXM.NEO")`). Anyone may relay a signed fixing; the signature is the authority. The EIP-712 domain has no chainId, so a fixing signed once verifies on every chain.
-- `src/ComputeToken.sol`: an ERC-1155 where each id is one corpus VM size (Fly-modeled: shared-cpu-1x 1 GB and so on) for a 30-day term, and one token is one VM-term. Minting is the payment: the catalog price in USDC on Monad goes to the treasury and the buyer holds a transferable claim. Redeeming burns the token and emits `Redeemed(holder, id, qty, accountRef)`; corpus indexes that event and provisions the machine. `totalSupply(id)` is the outstanding liability per size. `token/` is the CLI (types, mint, redeem, balance) and `web/mint.html` is the mint page.
+- `src/ComputeToken.sol`: an ERC-1155 where each id is one corpus VM size (Fly-modeled: shared-cpu-1x 1 GB and so on) and one token is one **permanently funded** machine: a corpus position whose principal is never spent and whose yield pays the monthly bill for as long as it is open. The price is corpus's own underwriting, `P = k · C / r` (monthly bill C, yield rate r = 7.24%, buffer k = 1.15), and both halves, principal and buffer, are recorded on chain so the token matches the corpus ledger. Minting is the payment: the price in USDC on Monad goes to the treasury and the buyer holds a transferable claim backed by a principal that is never spent. Redeeming burns the token and emits `Redeemed(holder, id, qty, accountRef)`; corpus indexes that event and opens the position. `totalSupply(id)` is the outstanding liability per size. `token/` is the CLI (types, mint, redeem, balance) and `web/mint.html` is the mint page.
 - `treasury/`: fund management. Customer deposits on Monad follow the deposit flow corpus already runs on Ethereum (HD-derived USDC address, finality-gated watcher, ledger), and settled float is swept into a curated USDC lending vault on Morpho (Hyperithm USDC Apex, with Aave v3 as fallback) instead of sitting idle; `sweep.mjs` supplies and withdraws. See `treasury/README.md` for the integration and the reasoning.
 - `oracle/`: the publisher side, extracted from the live feed: EIP-712 fixing signatures, daily attestations, a client that pays the x402 402 on Monad and verifies what comes back, and a permissionless relay that posts a fixing on chain.
 - `script/Deploy.s.sol`: deployment to Monad testnet.
 
 ## The compute token, and what it is not yet
 
-Today a corpus customer funds a machine from a balance held by corpus. The token separates paying from provisioning: pay once on Monad, hold a claim that any wallet can own, redeem whenever the machine is wanted. That makes compute a thing third parties can hold, gift, sell or market-make, with the oracle as the public price reference for the GPU sizes that come next.
+Today a corpus customer funds a position by depositing to an address corpus derives for them, and corpus opens the machine against it. The token separates paying from provisioning: pay once on Monad, hold a claim that any wallet can own, redeem whenever the machine is wanted. Because the position is permanent and its principal is never spent, the token is a claim on a yield-bearing principal, not on a prepaid term. That makes compute a thing third parties can hold, gift, sell or market-make, with the oracle as the public price reference for the GPU sizes that come next.
 
 Deliberately out of scope for this submission, and listed so nobody mistakes the demo for the product: the corpus-api side of redemption (wallet-to-account link, a VM-terms ledger beside the USD ledger, the watcher indexing `Redeemed` and provisioning), secondary liquidity, price hedging for GPU sizes, and the legal treatment of a tradeable claim on a service. The Fly-modeled sizes were chosen as the proof of concept precisely because their price is a catalog number set by corpus, so none of the GPU forward dynamics apply yet.
 
@@ -35,7 +35,7 @@ forge test
 # deploy oracle + token to Monad (mainnet by default; MOCK_USDC=1 on a testnet deploys a mock USDC)
 export MONAD_RPC=https://rpc.monad.xyz DEPLOYER_KEY=0x...
 forge script script/Deploy.s.sol --rpc-url $MONAD_RPC --broadcast --private-key $DEPLOYER_KEY
-# mint one shared-cpu-1x 1 GB VM-term (id 2) and redeem it to a corpus account
+# mint one permanently funded shared-cpu-1x 1 GB (id 2, $1,086.46) and redeem it to a corpus account
 cd token && npm install
 TOKEN=0x... node token.mjs types
 TOKEN=0x... BUYER_KEY=0x... node token.mjs mint 2 1

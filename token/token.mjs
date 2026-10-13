@@ -1,4 +1,4 @@
-// ComputeToken client. One token = one VM of a corpus size for one term; minting pays the catalog price in USDC on Monad.
+// ComputeToken client. One token = one permanently funded corpus VM of a size; minting pays corpus's position price in USDC on Monad.
 //   TOKEN=0x... node token.mjs types                         list sizes, prices and outstanding supply (no key)
 //   TOKEN=0x... node token.mjs balance 0x...                 a holder's balances (no key)
 //   TOKEN=0x... BUYER_KEY=0x... node token.mjs mint <id> <qty>
@@ -12,7 +12,7 @@ const chain = { id: chainId, name: chainId === 143 ? 'Monad' : 'Monad Testnet', 
 const TOKEN = process.env.TOKEN; if (!TOKEN) { console.error('TOKEN=0x... required'); process.exit(2); }
 export const abi = parseAbi([
   'function usdc() view returns (address)', 'function treasury() view returns (address)', 'function typeCount() view returns (uint256)',
-  'function types(uint256) view returns (string slug, string label, uint32 termDays, uint256 priceUsdc, bool active)',
+  'function types(uint256) view returns (string slug, string label, uint256 monthlyUsdc, uint256 principalUsdc, uint256 priceUsdc, bool active)',
   'function totalSupply(uint256 id) view returns (uint256)', 'function balanceOf(address, uint256) view returns (uint256)',
   'function mint(uint256 id, uint256 qty) returns (uint256)', 'function redeem(uint256 id, uint256 qty, bytes32 accountRef)',
 ]);
@@ -25,7 +25,7 @@ async function types() {
   const out = [];
   for (let id = 0; id < n; id++) {
     const [t, supply] = await Promise.all([pub.readContract({ address: TOKEN, abi, functionName: 'types', args: [BigInt(id)] }), pub.readContract({ address: TOKEN, abi, functionName: 'totalSupply', args: [BigInt(id)] })]);
-    out.push({ id, slug: t[0], label: t[1], termDays: t[2], priceUsdc: formatUnits(t[3], 6), active: t[4], outstanding: supply.toString() });
+    out.push({ id, slug: t[0], label: t[1], monthlyUsdc: formatUnits(t[2], 6), principalUsdc: formatUnits(t[3], 6), priceUsdc: formatUnits(t[4], 6), active: t[5], outstanding: supply.toString() });
   }
   return out;
 }
@@ -41,7 +41,7 @@ else if (cmd === 'balance') {
   const id = BigInt(rest[0]); const qty = BigInt(rest[1]);
   if (cmd === 'mint') {
     const [t, usdc] = await Promise.all([pub.readContract({ address: TOKEN, abi, functionName: 'types', args: [id] }), pub.readContract({ address: TOKEN, abi, functionName: 'usdc' })]);
-    const cost = t[3] * qty; const txs = {};
+    const cost = t[4] * qty; const txs = {};
     const allowance = await pub.readContract({ address: usdc, abi: erc20, functionName: 'allowance', args: [account.address, TOKEN] });
     if (allowance < cost) txs.approve = await send(wal, account, { address: usdc, abi: erc20, functionName: 'approve', args: [TOKEN, cost] });
     txs.mint = await send(wal, account, { address: TOKEN, abi, functionName: 'mint', args: [id, qty] });

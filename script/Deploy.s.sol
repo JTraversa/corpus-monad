@@ -26,6 +26,17 @@ contract Deploy is Script {
         s[9] = Size("p4-8g",  "performance-4x 8 GB",  12400);
     }
 
+    // corpus underwriting, mirrored from corpus-api routes/funding.rs and corpus-website src/app/catalog.js:
+    // price = k·C/r and principal = C/r, each rounded from the ANNUAL cost; the buffer is the remainder.
+    uint256 constant YIELD_RATE_BPS = 724;   // r = 7.24 %
+    uint256 constant BUFFER_K_BPS = 11_500;  // k = 1.15
+    function divRound(uint256 a, uint256 b) internal pure returns (uint256) { return (a + b / 2) / b; }
+    function split(uint256 monthlyCents) internal pure returns (uint256 principalCents, uint256 priceCents) {
+        uint256 annual = monthlyCents * 12;
+        principalCents = divRound(annual * 10_000, YIELD_RATE_BPS);
+        priceCents = divRound(annual * BUFFER_K_BPS, YIELD_RATE_BPS);
+    }
+
     function run() external {
         address publisher = vm.envOr("PUBLISHER", address(0x1b77aE05cd23C514A1De304b6b771513f6eFa780));
         address usdc = vm.envOr("USDC", address(0x754704Bc059F8C67012fEd69BC8A327a5aafb603));
@@ -35,7 +46,10 @@ contract Deploy is Script {
         FixingOracle oracle = new FixingOracle(publisher);
         ComputeToken token = new ComputeToken(IERC20(usdc), treasury, "https://cloud.trycorpus.ai/token/{id}.json");
         Size[10] memory s = catalog();
-        for (uint256 i = 0; i < s.length; i++) token.registerType(s[i].slug, s[i].label, 30, s[i].cents * 10_000); // cents -> 6-decimal USDC
+        for (uint256 i = 0; i < s.length; i++) {
+            (uint256 principalCents, uint256 priceCents) = split(s[i].cents);
+            token.registerType(s[i].slug, s[i].label, s[i].cents * 10_000, principalCents * 10_000, priceCents * 10_000); // cents -> 6-decimal USDC
+        }
         vm.stopBroadcast();
         console.log("USDC        ", usdc);
         console.log("FixingOracle", address(oracle));

@@ -1,0 +1,9 @@
+{
+  "name": "corpus-treasury-monad",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "corpusAI treasury on Monad: sweep settled USDC deposits into Aave v3 and withdraw them to pay compute bills.",
+  "scripts": { "status": "node sweep.mjs --status", "supply": "node sweep.mjs --supply", "withdraw": "node sweep.mjs --withdraw" },
+  "dependencies": { "viem": "^2.0.0" }
+}

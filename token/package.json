@@ -1,0 +1,9 @@
+{
+  "name": "corpus-compute-token",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Client for ComputeToken on Monad: list VM sizes, mint a VM-term in USDC, redeem it to a corpus account.",
+  "scripts": { "types": "node token.mjs types" },
+  "dependencies": { "viem": "^2.0.0" }
+}

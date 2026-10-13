@@ -1,0 +1,17 @@
+{
+  "name": "corpus-oracle-monad",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Client, relay and publisher-side reference for corpusAI Cloud Pricing fixings on Monad: pay the x402 402 in USDC on Monad, verify the EIP-712 fixing signature, relay it to FixingOracle.",
+  "scripts": {
+    "verify": "node verify.mjs",
+    "pay": "node pay-monad.mjs",
+    "relay": "node relay.mjs"
+  },
+  "dependencies": {
+    "@x402/core": "^2.27.0",
+    "@x402/evm": "^2.27.0",
+    "viem": "^2.0.0"
+  }
+}

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<title>corpusAI on Monad · Compute you can hold</title>
+<meta name="description" content="corpusAI on Monad: mint a corpus VM as a token in USDC, hold or trade it, redeem it for the machine. Underneath, a verifiable compute price oracle, x402 payments for prices on Monad, and a treasury that puts the float to work in Monad DeFi." />
+<link rel="canonical" href="https://hackathon.trycorpus.ai/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="corpusAI" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:title" content="corpusAI on Monad · Compute you can hold" />
+<meta property="og:description" content="Mint a corpus VM as a token in USDC on Monad, hold or trade it, redeem it for the machine. A Monad Metropolis submission." />
+<meta property="og:url" content="https://hackathon.trycorpus.ai/" />
+<meta property="og:image" content="https://hackathon.trycorpus.ai/og.jpg" />
+<meta property="og:image:alt" content="The corpusAI mark, a ring around a green square." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#ebebeb" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/site.css" />
+</head>
+<body>
+<nav class="nav"><div class="wrap nav-in">
+  <a class="brand" href="/">
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>
+    corpusAI <small>on Monad</small>
+  </a>
+  <div class="nav-links">
+    <a href="#facets">facets</a>
+    <a href="#how">how_it_connects</a>
+    <a href="#live">whats_live</a>
+    <a href="#disclosures">disclosures</a>
+    <a href="https://github.com/JTraversa/corpus-monad" class="keep">github</a>
+    <a href="/mint" class="nav-cta">mint_compute</a>
+  </div>
+</div></nav>
+
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">Monad Metropolis · Track 4 · Trust, identity and AI infrastructure</p>
+  <h1>Compute<br>you can hold.</h1>
+  <p class="hero-lead">Mint a corpus VM as a token in USDC on Monad. Hold it, send it, sell it, or redeem it for the machine. Underneath: a compute price oracle any contract can verify, x402 payments for prices settled on Monad, and a treasury that puts the float to work in Monad DeFi.</p>
+  <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">Read the code</a><a class="btn ghost" href="https://cloud.trycorpus.ai">The price feed</a></div>
+</div></section>
+
+<section class="wrap"><div class="strip-card">
+  <div class="strip-bar"><span class="live">Live from the feed, the chain and the vault</span><span id="stamp">loading</span></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-k">x402 offers on Monad</div><div class="stat-v" id="s-x402">…</div><div class="stat-c">USDC on <code>eip155:143</code> in every 402 the feed returns</div></div>
+    <div class="stat"><div class="stat-k">H100 SXM fixing</div><div class="stat-v" id="s-fix">…</div><div class="stat-c" id="s-fix-c">USD per GPU-hour, signed by the publisher</div></div>
+    <div class="stat"><div class="stat-k">Daily attestations</div><div class="stat-v" id="s-att">…</div><div class="stat-c" id="s-att-c">fixing sets attested on chain</div></div>
+    <div class="stat"><div class="stat-k">Treasury vault</div><div class="stat-v ok" id="s-vault">…</div><div class="stat-c" id="s-vault-c">Hyperithm USDC Apex on Morpho, net APY</div></div>
+  </div>
+</div></section>
+
+<section class="sec" id="facets"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Four facets</p><h2>One system, four pieces, all on Monad.</h2><p class="lead">Each piece runs on its own. Together they make compute something an agent can price, pay for, hold and redeem without an account on either side.</p></div>
+  <div class="steps">
+    <div class="step"><div class="step-n">[ 01 ]</div><h3>Pay for prices</h3><p>cloud.trycorpus.ai serves spot, on-demand, reserved and GPU prices across providers, 29 priced endpoints and 35 MCP tools. Every 402 carries a USDC offer on Monad, settled by the Monad facilitator with no API key on either side. An agent pays a cent, gets the price back signed.</p><a href="https://cloud.trycorpus.ai/x402">How x402 works on the feed</a></div>
+    <div class="step"><div class="step-n">[ 02 ]</div><h3>Verify them on chain</h3><p>Each day the feed publishes index fixings, EIP-712 signed by the corpusAI publisher key and attested on chain. FixingOracle on Monad checks that signature, so anyone can relay a fixing and nobody can forge one. Any contract can read the H100 price.</p><a href="https://cloud.trycorpus.ai/governance">Governance and the signing scheme</a></div>
+    <div class="step"><div class="step-n">[ 03 ]</div><h3>Mint compute</h3><p>ComputeToken is an ERC-1155 where one token is one corpus VM for 30 days. Minting is the payment: the catalog price in USDC goes to the treasury, the buyer holds a transferable claim. Redeeming burns it and tells corpus which account gets the machine.</p><a href="/mint">Mint a VM-term</a></div>
+    <div class="step"><div class="step-n">[ 04 ]</div><h3>Put the float to work</h3><p>Mint payments land in the treasury and are swept into a curated USDC lending vault on Morpho, with Aave v3 as fallback, instead of sitting idle. The yield subsidises the compute. Withdraw when the hosting bills fall due.</p><a href="https://github.com/JTraversa/corpus-monad/tree/main/treasury">The treasury sweep</a></div>
+  </div>
+</div></section>
+
+<section class="sec" id="how" style="padding-top:0"><div class="wrap"><div class="band">
+  <p class="eyebrow">How it connects</p>
+  <h2>From a price to a machine.</h2>
+  <p class="lead">The same USDC on Monad moves through every step. The oracle is the public reference for what compute costs; the token is the claim on it; the treasury is where the money waits.</p>
+  <div class="flow">
+    <div class="fl"><b>price</b><span>An agent asks the feed for a price and pays the 402 in USDC on Monad. The answer carries the publisher's signature.</span><code>GET /v1/index/fixing → 402 → eip155:143</code></div>
+    <div class="fl"><b>verify</b><span>Anyone posts the signed fixing to FixingOracle. The contract recovers the signer and stores the value under its day.</span><code>oracle.post(fixing, sig) · latest("CX.H100SXM.NEO")</code></div>
+    <div class="fl"><b>mint</b><span>A buyer picks a VM size and pays the catalog price. The token is minted to their wallet; the USDC goes to the treasury.</span><code>token.mint(id, qty) → Minted</code></div>
+    <div class="fl"><b>redeem</b><span>The holder burns the token naming a corpus account. corpus indexes the event and provisions the machine. The float earned yield in the meantime.</span><code>token.redeem(id, qty, accountRef) → Redeemed</code></div>
+  </div>
+  <p class="band-note">Why Monad: 400 ms blocks and sub-second finality make per-call settlement feel like an ordinary API round trip, and the USDC agents pay with is the same asset Morpho, Aave and Euler lend on Monad, so the float never has to leave the chain.</p>
+</div></div></section>
+
+<section class="sec" id="live" style="padding-top:0"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">What is live</p><h2>Everything here is real and callable.</h2><p class="lead">Addresses fill in as contracts are deployed. Each row links to the thing itself, not to a description of it.</p></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Surface</th><th>Where</th><th>Status</th></tr></thead>
+    <tbody id="live-rows">
+      <tr><td>Price feed and docs</td><td><a href="https://cloud.trycorpus.ai">cloud.trycorpus.ai</a></td><td><span class="pill ok">live</span></td></tr>
+      <tr><td>A paid call on Monad</td><td><code>curl -i "https://cloud.trycorpus.ai/v1/index/fixing?ticker=CX.H100SXM.NEO"</code></td><td><span class="pill ok">402 carries eip155:143</span></td></tr>
+      <tr><td>Daily attestations of the fixing set</td><td><a href="https://cloud.trycorpus.ai/v1/attestations">/v1/attestations</a></td><td><span class="pill ok">live</span></td></tr>
+      <tr><td>Hosted MCP server</td><td><a href="https://cloud.trycorpus.ai/.well-known/mcp.json">cloud.trycorpus.ai/mcp</a></td><td><span class="pill ok">live</span></td></tr>
+      <tr id="row-oracle"><td>FixingOracle on Monad</td><td class="addr">pending deployment</td><td><span class="pill soon">deploying</span></td></tr>
+      <tr id="row-token"><td>ComputeToken on Monad</td><td class="addr">pending deployment</td><td><span class="pill soon">deploying</span></td></tr>
+      <tr id="row-treasury"><td>Treasury and vault position</td><td class="addr"></td><td><span class="pill ok">Morpho · Hyperithm USDC Apex</span></td></tr>
+      <tr><td>Source, tests, clients</td><td><a href="https://github.com/JTraversa/corpus-monad">github.com/JTraversa/corpus-monad</a></td><td><span class="pill">MIT</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Ten tests across both contracts, including a real fixing signed by the production publisher key that the oracle must accept unchanged and reject with any edit.</p>
+</div></section>
+
+<section class="sec" id="disclosures" style="padding-top:0"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Disclosures</p><h2>What was built when, and what is not built yet.</h2><p class="lead">Listed so nobody mistakes the demo for the product.</p></div>
+  <div class="gs">
+    <div class="g"><div class="g-c"><i></i>Built in the window</div><div class="g-m">The Monad x402 rail on the feed (1 Oct), EIP-712 fixing signatures and daily attestations (27 Sep), the hosted MCP server, FixingOracle, ComputeToken, the mint page, the clients and the treasury sweep (10 to 13 Oct 2026).</div></div>
+    <div class="g"><div class="g-c"><i></i>Pre-existing foundation</div><div class="g-m">The corpusAI Cloud Pricing feed (collectors, archive, index methodology, API) and the corpus compute platform on Ethereum with its deposit flow predate the hackathon. Everything here consumes the feed as an external service and points the existing deposit flow at Monad.</div></div>
+    <div class="g"><div class="g-c"><i></i>Not yet built</div><div class="g-m">The corpus-api side of redemption: the wallet-to-account link, a VM-terms ledger beside the USD ledger, and the watcher that indexes <code>Redeemed</code> and provisions the machine. Also secondary liquidity, price hedging for GPU sizes, and the legal treatment of a tradeable claim on a service.</div></div>
+    <div class="g"><div class="g-c"><i></i>Why Fly-sized VMs first</div><div class="g-m">Their price is a catalog number set by corpus, so none of the GPU forward dynamics apply yet. The oracle is the public price reference for the GPU sizes that come next.</div></div>
+    <div class="g"><div class="g-c"><i></i>Team and tools</div><div class="g-m">Julian Traversa and Alexandra, one team, one submission. Developed with AI assistance (Claude Code) under the team's direction; every design decision, key and deployment is the team's.</div></div>
+  </div>
+</div></section>
+
+<section class="wrap"><div class="cta">
+  <p class="eyebrow">Try it</p>
+  <h2>Mint one VM-term for $5.70.</h2>
+  <p class="lead">A shared-cpu-1x with 1 GB for 30 days, paid in USDC on Monad. Then send it to a friend, or redeem it.</p>
+  <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">GitHub</a></div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="f-top">
+    <div><a class="brand" href="https://www.trycorpus.ai"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>corpusAI</a><p class="f-b">Permanently funded compute.</p></div>
+    <div class="f-col"><h4>This submission</h4><ul><li><a href="/mint">Mint compute</a></li><li><a href="https://github.com/JTraversa/corpus-monad">Source</a></li><li><a href="#disclosures">Disclosures</a></li></ul></div>
+    <div class="f-col"><h4>corpusAI Cloud Pricing</h4><ul><li><a href="https://cloud.trycorpus.ai/charts">Charts</a></li><li><a href="https://cloud.trycorpus.ai/docs">API</a></li><li><a href="https://cloud.trycorpus.ai/x402">Pay per request (x402)</a></li><li><a href="https://cloud.trycorpus.ai/governance">Governance</a></li></ul></div>
+    <div class="f-col"><h4>Contact</h4><ul><li><a href="mailto:hello@trycorpus.ai">hello@trycorpus.ai</a></li><li><a href="https://www.trycorpus.ai/terms">Terms</a></li><li><a href="https://www.trycorpus.ai/privacy">Privacy</a></li></ul></div>
+  </div>
+  <div class="f-bottom"><p class="legal">© 2026 corpusAI. A hackathon submission: the token is a proof of concept on Fly-sized machines, and nothing on this page is an offer to sell a security or a commodity contract.</p><p class="built">Built by <a href="https://x.com/TraversaJulian">Julian Traversa</a> and Alexandra</p></div>
+</div></footer>
+
+<script type="module">
+import { CONFIG } from '/config.js';
+const $ = (s) => document.querySelector(s);
+const short = (a) => a.slice(0, 6) + '…' + a.slice(-4);
+const addrLink = (a) => `<a href="${CONFIG.explorer}/address/${a}">${short(a)}</a>`;
+$('#stamp').textContent = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+if (CONFIG.treasury) $('#row-treasury td.addr').innerHTML = `treasury ${addrLink(CONFIG.treasury)} · vault ${addrLink(CONFIG.vault)}`;
+if (CONFIG.oracle) { $('#row-oracle td.addr').innerHTML = addrLink(CONFIG.oracle); $('#row-oracle .pill').outerHTML = '<span class="pill ok">live</span>'; }
+if (CONFIG.token) { $('#row-token td.addr').innerHTML = addrLink(CONFIG.token); $('#row-token .pill').outerHTML = '<span class="pill ok">live</span>'; }
+(async () => { try {
+  const r = await fetch(CONFIG.feed + '/v1/index/fixing?ticker=CX.H100SXM.NEO'); const j = await r.json();
+  const accepts = j.accepts || []; const monad = accepts.filter((a) => a.network === 'eip155:143');
+  $('#s-x402').textContent = monad.length + ' / ' + accepts.length;
+} catch { $('#s-x402').textContent = 'feed'; } })();
+(async () => { try {
+  const j = await (await fetch(CONFIG.feed + '/v1/attestations')).json();
+  $('#s-att').textContent = j.count ?? (j.attestations || []).length; const last = (j.attestations || []).at(-1) || (j.attestations || [])[0];
+  if (last?.day) $('#s-att-c').textContent = 'latest ' + last.day + ', on ' + (j.chain === 'eip155:8453' ? 'Base' : j.chain);
+  const day = last?.day; if (!day) return;
+  const f = await (await fetch(CONFIG.feed + '/attest/' + day + '.json')).json();
+  const find = (o) => { if (!o || typeof o !== 'object') return null; if (o.ticker === 'CX.H100SXM.NEO') return o; for (const v of Object.values(o)) { const h = find(v); if (h) return h; } return null; };
+  const h = find(f); if (!h) return;
+  const v = h.value ?? (h.valueE18 ? Number(BigInt(h.valueE18)) / 1e18 : null);
+  if (v != null) { $('#s-fix').textContent = '$' + Number(v).toFixed(2); $('#s-fix-c').textContent = 'USD per GPU-hour on ' + day + (h.n ? ', n = ' + h.n : ''); }
+} catch { /* leave placeholders */ } })();
+(async () => { try {
+  const r = await fetch('https://blue-api.morpho.org/graphql', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ query: `{ vaultV2ByAddress(address: "${CONFIG.vault}", chainId: 143) { netApy totalAssetsUsd } }` }) });
+  const v = (await r.json()).data?.vaultV2ByAddress; if (!v) return;
+  $('#s-vault').textContent = (v.netApy * 100).toFixed(2) + '%'; $('#s-vault-c').textContent = 'Hyperithm USDC Apex on Morpho, $' + (v.totalAssetsUsd / 1e6).toFixed(1) + 'M supplied';
+} catch { $('#s-vault').textContent = 'Morpho'; } })();
+</script>
+</body>
+</html>

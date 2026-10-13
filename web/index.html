@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="lock">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,12 +23,47 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/site.css" />
+<style>
+/* Landing-only: the ink splash and intro, ported from the corpus landing. */
+:root{--monad:#836EF9}
+html.lock{overflow:hidden}
+.nav{position:fixed;inset:0 0 auto;background:transparent;backdrop-filter:none;border-bottom:1px solid transparent;transition:background .25s,border-color .25s}
+.nav.scrolled{background:rgba(235,235,235,.88);backdrop-filter:blur(12px);border-color:var(--rule)}
+.nav.entering{transition:background .25s,border-color .25s,transform 1500ms cubic-bezier(.65,0,.35,1)}
+.nav.offset-up{transform:translateY(-100%)}
+.brand .on{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--monad);margin-left:6px}
+.brand .on svg{width:14px;height:14px;display:block}
+.hero-video{position:absolute;top:0;left:0;width:100%;height:100lvh;object-fit:cover;z-index:0;transition:height 1500ms cubic-bezier(.65,0,.35,1),object-position 1500ms cubic-bezier(.65,0,.35,1)}
+.hero-video.settled{height:70svh;min-height:430px;object-position:50% 62%;-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 150px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 150px),transparent)}
+.page-root{position:relative;z-index:1}
+.page-root.entering{transition:transform 1500ms cubic-bezier(.65,0,.35,1)}
+.page-root.offset{transform:translateY(100vh)}
+.page-sheet{position:relative;z-index:1;background:var(--bg)}
+.hero{position:relative;height:76svh;min-height:460px;background:transparent;overflow:hidden;padding:0}
+.hero-content{position:absolute;inset:auto 0 clamp(24px,5vh,56px);color:var(--ink)}
+.hero-content .wrap{max-width:none;padding-inline:clamp(28px,5.5vw,88px);padding-left:calc(clamp(28px,5.5vw,88px) + 10vw)}
+.hero h1{margin-top:20px;font-size:clamp(40px,7.6vw,160px)}
+.lockup{display:flex;align-items:center;gap:14px;margin-top:22px;font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.02em;opacity:0;transform:translateY(6px);transition:opacity 700ms ease 1500ms,transform 700ms ease 1500ms}
+html:not(.lock) .lockup{opacity:1;transform:none}
+.lockup svg{display:block}
+.lockup .ring{stroke:currentColor}.lockup .core{fill:var(--green)}
+.lockup .x{font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.lockup .mon{display:flex;align-items:center;gap:8px;color:var(--monad)}
+.scroll-hint{position:absolute;right:clamp(18px,3.5vw,44px);bottom:28px;font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;writing-mode:vertical-rl}
+.hero-sub{padding:20px 0 28px}
+.hero-sub .wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.hero-sub .hero-lead{text-align:center;margin-top:0}
+.hero-sub .actions{margin-top:0;justify-content:center}
+.strip-wrap{margin-top:14vh}
+@media(max-width:520px){.hero-content .wrap{padding-left:clamp(28px,5.5vw,88px)}.scroll-hint{display:none}.brand .on{font-size:0;gap:0}.brand .on svg{width:16px;height:16px}}
+</style>
 </head>
 <body>
-<nav class="nav"><div class="wrap nav-in">
+<video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="/media/corpus_ink_poster.jpg" aria-hidden="true"></video>
+<nav class="nav offset-up" id="nav" style="transform:translateY(-100%)"><div class="wrap nav-in">
   <a class="brand" href="/">
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>
-    corpusAI <small>on Monad</small>
+    corpusAI <span class="on">on Monad<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.782 0C8.37963 0 0 8.53443 0 11.9999C0 15.4654 8.37963 24 11.782 24C15.1844 24 23.5642 15.4653 23.5642 11.9999C23.5642 8.53458 15.1845 0 11.782 0ZM9.94598 18.8619C8.51124 18.4637 4.65378 11.5912 5.04481 10.1299C5.43584 8.66856 12.1834 4.73984 13.6181 5.1381C15.0529 5.5363 18.9104 12.4087 18.5194 13.87C18.1283 15.3314 11.3807 19.2602 9.94598 18.8619Z"/></svg></span>
   </a>
   <div class="nav-links">
     <a href="#owning">owning_compute</a>
@@ -41,14 +76,27 @@
   </div>
 </div></nav>
 
-<section class="hero"><div class="wrap">
-  <p class="eyebrow">Monad Metropolis · Track 4 · Trust, identity and AI infrastructure</p>
-  <h1>Compute<br>that pays you.</h1>
+<div class="page-root offset" id="pageRoot" style="transform:translateY(100vh)">
+<header class="hero">
+  <div class="hero-content"><div class="wrap">
+    <p class="eyebrow">Monad Metropolis · Onchain finance and trading</p>
+    <h1>Compute<br>that pays you.</h1>
+    <div class="lockup" aria-label="corpusAI on Monad">
+      <span style="display:flex;align-items:center;gap:10px"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>corpusAI</span>
+      <span class="x">on</span>
+      <span class="mon">Monad<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.782 0C8.37963 0 0 8.53443 0 11.9999C0 15.4654 8.37963 24 11.782 24C15.1844 24 23.5642 15.4653 23.5642 11.9999C23.5642 8.53458 15.1845 0 11.782 0ZM9.94598 18.8619C8.51124 18.4637 4.65378 11.5912 5.04481 10.1299C5.43584 8.66856 12.1834 4.73984 13.6181 5.1381C15.0529 5.5363 18.9104 12.4087 18.5194 13.87C18.1283 15.3314 11.3807 19.2602 9.94598 18.8619Z"/></svg></span>
+    </div>
+  </div></div>
+  <span class="scroll-hint" aria-hidden="true">Scroll ↓</span>
+</header>
+
+<div class="page-sheet">
+<div class="hero-sub"><div class="wrap">
   <p class="hero-lead">Own a machine as a token on Monad. While you hold it, jobs routed to the idle compute earn you yield. It trades on its own value. And whenever you want, you redeem it for the machine itself, permanently funded, principal never spent. Underneath: a compute price oracle any contract can verify, x402 payments for prices settled on Monad, and a treasury that puts the float to work in Monad DeFi.</p>
   <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">Read the code</a><a class="btn ghost" href="https://cloud.trycorpus.ai">The price feed</a></div>
-</div></section>
+</div></div>
 
-<section class="wrap"><div class="strip-card">
+<section class="wrap strip-wrap"><div class="strip-card">
   <div class="strip-bar"><span class="live">Live from the feed, the chain and the vault</span><span id="stamp">loading</span></div>
   <div class="stats">
     <div class="stat"><div class="stat-k">x402 offers on Monad</div><div class="stat-v" id="s-x402">…</div><div class="stat-c">USDC on <code>eip155:143</code> in every 402 the feed returns</div></div>
@@ -136,9 +184,33 @@
   </div>
   <div class="f-bottom"><p class="legal">© 2026 corpusAI. A hackathon submission: the token is a proof of concept on Fly-sized machines, the yearly rate positions are priced at is not a quote or a guarantee, and nothing on this page is an offer to sell a security or a commodity contract.</p><p class="built">Built by <a href="https://x.com/TraversaJulian">Julian Traversa</a> and Alexandra</p></div>
 </div></footer>
+</div>
+</div>
 
 <script type="module">
 import { CONFIG } from '/config.js';
+(function () {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const nav = document.getElementById('nav'); const pageRoot = document.getElementById('pageRoot'); const vid = document.getElementById('heroVideo');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 80), { passive: true });
+  const small = matchMedia('(max-width: 768px)').matches; const saveData = navigator.connection && navigator.connection.saveData;
+  vid.src = (small || saveData) ? '/media/corpus_ink_loop_540.mp4' : '/media/corpus_ink_loop.mp4';
+  const settle = () => { document.documentElement.classList.remove('lock'); pageRoot.classList.remove('entering'); nav.classList.remove('entering'); };
+  if (reduced || location.hash) {
+    pageRoot.style.transition = 'none'; nav.style.transition = 'none'; vid.style.transition = 'none';
+    pageRoot.style.transform = ''; nav.style.transform = ''; pageRoot.classList.remove('offset'); nav.classList.remove('offset-up'); vid.classList.add('settled'); settle();
+  } else {
+    let started = false;
+    const begin = () => { if (started) return; started = true; setTimeout(() => {
+      pageRoot.classList.add('entering'); nav.classList.add('entering'); void nav.offsetHeight;
+      pageRoot.style.transform = ''; nav.style.transform = ''; pageRoot.classList.remove('offset'); nav.classList.remove('offset-up'); vid.classList.add('settled');
+      setTimeout(settle, 1550);
+    }, 1000); };
+    if (vid.readyState >= 2) begin(); else vid.addEventListener('loadeddata', begin, { once: true });
+    setTimeout(begin, 4000);
+  }
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); }).observe(vid);
+})();
 const $ = (s) => document.querySelector(s);
 const short = (a) => a.slice(0, 6) + '…' + a.slice(-4);
 const addrLink = (a) => `<a href="${CONFIG.explorer}/address/${a}">${short(a)}</a>`;

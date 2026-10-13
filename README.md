@@ -1,6 +1,6 @@
 # corpusAI on Monad
 
-Redeemable, transferable compute on Monad: mint a permanently funded corpus VM as a token in USDC, hold or trade it, redeem it for the machine. Underneath: a verifiable compute price oracle, x402 payments for prices in USDC on Monad, and a treasury that puts the float to work in Monad DeFi. Built for the Monad Metropolis hackathon, Track 4 (Trust, Identity and AI Infrastructure).
+Compute that pays you: own a corpus machine as a token on Monad. While held, jobs routed to the idle machine earn the holder yield; the token trades on its own value; and it redeems, any time, for a permanently funded machine whose principal is never spent. Underneath: a verifiable compute price oracle, x402 payments for prices in USDC on Monad, and a treasury that puts the float to work in Monad DeFi. Built for the Monad Metropolis hackathon, Track 4 (Trust, Identity and AI Infrastructure).
 
 **What it is.** Agents already pay [corpusAI Cloud Pricing](https://cloud.trycorpus.ai) per call for cloud, GPU and LLM token prices over x402. Since 1 October 2026 those calls settle in USDC on Monad through Monad's facilitator, and every index fixing the feed serves carries an EIP-712 signature by the corpusAI publisher key plus a daily on-chain attestation of the whole fixing set. This repository is the Monad side of that system:
 
@@ -10,11 +10,17 @@ Redeemable, transferable compute on Monad: mint a permanently funded corpus VM a
 - `oracle/`: the publisher side, extracted from the live feed: EIP-712 fixing signatures, daily attestations, a client that pays the x402 402 on Monad and verifies what comes back, and a permissionless relay that posts a fixing on chain.
 - `script/Deploy.s.sol`: deployment to Monad testnet.
 
+## Owning compute: three ways a token pays
+
+1. **Yield from jobs.** An unredeemed token's machine is idle. Jobs sent to the corpus network are routed to idle capacity and the fee accrues to the token holder: a forever GPU rental that earns while you wait. The router is roadmap and applies first to GPU sizes, where idle capacity has a market; the token is the thing the accrual attaches to.
+2. **Market value.** The token is an ERC-1155 backed by a principal that is never spent, and the oracle is the public price reference for the GPU sizes that follow, so it can be held, sent, sold and market-made, and its value moves with compute prices and the yield it earns.
+3. **Deliverable compute.** It is still a machine. Burn it naming a corpus account and corpus opens the permanently funded position.
+
 ## The compute token, and what it is not yet
 
 Today a corpus customer funds a position by depositing to an address corpus derives for them, and corpus opens the machine against it. The token separates paying from provisioning: pay once on Monad, hold a claim that any wallet can own, redeem whenever the machine is wanted. Because the position is permanent and its principal is never spent, the token is a claim on a yield-bearing principal, not on a prepaid term. That makes compute a thing third parties can hold, gift, sell or market-make, with the oracle as the public price reference for the GPU sizes that come next.
 
-Deliberately out of scope for this submission, and listed so nobody mistakes the demo for the product: the corpus-api side of redemption (wallet-to-account link, a VM-terms ledger beside the USD ledger, the watcher indexing `Redeemed` and provisioning), secondary liquidity, price hedging for GPU sizes, and the legal treatment of a tradeable claim on a service. The Fly-modeled sizes were chosen as the proof of concept precisely because their price is a catalog number set by corpus, so none of the GPU forward dynamics apply yet.
+Deliberately out of scope for this submission, and listed so nobody mistakes the demo for the product: the job router and the accrual of job fees to holders (the yield leg), the corpus-api side of redemption (wallet-to-account link, a VM-terms ledger beside the USD ledger, the watcher indexing `Redeemed` and provisioning), secondary liquidity, price hedging for GPU sizes, and the legal treatment of a tradeable claim on a service. The Fly-modeled sizes were chosen as the proof of concept precisely because their price is a catalog number set by corpus, so none of the GPU forward dynamics apply yet.
 
 ## Why Monad
 

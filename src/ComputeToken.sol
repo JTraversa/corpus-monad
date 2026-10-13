@@ -19,6 +19,9 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 /// watcher indexes that event and opens it. Between mint and redeem the token is an ordinary ERC-1155 and can
 /// be held, sent or sold.
 ///
+/// Roadmap, not in this contract: jobs routed to an unredeemed token's idle machine accrue their fee to the
+/// holder, so a held token earns while it waits. That accrual attaches to the token id and holder recorded here.
+///
 /// `totalSupply(id)` is the outstanding liability for that size, in machines. The operator registers sizes from
 /// the corpus catalog; a later version can price GPU sizes from FixingOracle instead.
 contract ComputeToken is ERC1155, ERC1155Supply {

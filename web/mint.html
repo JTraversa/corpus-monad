@@ -7,7 +7,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <title>Mint compute · corpusAI on Monad</title>
-<meta name="description" content="Mint a permanently funded corpus VM as a token in USDC on Monad. One token is one machine whose principal is never spent and whose yield pays the bill. Hold it, send it, or redeem it to your corpus account." />
+<meta name="description" content="Own a corpus machine as a token on Monad. It earns from jobs routed to it while you hold it, trades on its own value, and redeems for a permanently funded machine." />
 <link rel="canonical" href="https://hackathon.trycorpus.ai/mint" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="corpusAI" />
@@ -41,7 +41,7 @@
 <section class="hero" style="padding-bottom:28px"><div class="wrap">
   <p class="eyebrow">Mint compute</p>
   <h1 style="font-size:clamp(34px,5.6vw,88px)">A machine,<br>as a token.</h1>
-  <p class="hero-lead">One token is one permanently funded corpus machine: a position whose principal is never spent and whose yield pays the monthly bill for as long as it is open. The price is corpus's own underwriting, principal plus a buffer, paid once in USDC on Monad. Hold the token, send it, or redeem it to a corpus account.</p>
+  <p class="hero-lead">One token is one permanently funded corpus machine: a position whose principal is never spent and whose yield pays the monthly bill for as long as it is open. While you hold it, jobs routed to the idle machine earn you yield. It trades on its own value. And it redeems, any time, for the machine itself. The price is corpus's own underwriting, principal plus a buffer, paid once in USDC on Monad.</p>
 </div></section>
 
 <section class="wrap" style="padding-bottom:clamp(64px,9vw,120px)">
@@ -87,9 +87,9 @@
 
   <div class="steps" style="margin-top:40px">
     <div class="step"><div class="step-n">[ 01 ]</div><h3>Pay once</h3><p>The mint is the payment. Principal plus buffer in USDC goes straight to the corpus treasury on Monad, where it is swept into the lending vault and starts earning.</p></div>
-    <div class="step"><div class="step-n">[ 02 ]</div><h3>Hold a claim</h3><p>The token is an ordinary ERC-1155 backed by a principal that is never spent. It sits in your wallet, can be sent to anyone, and can be sold. Supply per size is the outstanding liability.</p></div>
+    <div class="step"><div class="step-n">[ 02 ]</div><h3>Hold, and earn</h3><p>The token is an ordinary ERC-1155 backed by a principal that is never spent. It can be sent or sold, and while it is unredeemed, jobs routed to the idle machine pay the holder. The job router is the next build; GPU sizes come first.</p></div>
     <div class="step"><div class="step-n">[ 03 ]</div><h3>Redeem when ready</h3><p>Burn it naming a corpus account. The <code>Redeemed</code> event is the instruction to open the position; corpus indexes it the way it indexes deposits, and the yield pays the bill from then on.</p></div>
-    <div class="step"><div class="step-n">[ 04 ]</div><h3>Not yet wired</h3><p>The corpus-api side of redemption is the next step after the hackathon. Today a redeem is a real burn and a real event; the position is opened by hand.</p></div>
+    <div class="step"><div class="step-n">[ 04 ]</div><h3>Not yet wired</h3><p>The job router and the corpus-api side of redemption are the next steps after the hackathon. Today a redeem is a real burn and a real event; the position is opened by hand, and no job yield accrues yet.</p></div>
   </div>
 </section>
 

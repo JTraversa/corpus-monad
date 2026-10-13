@@ -49,7 +49,8 @@ h2{font-family:var(--display);font-size:clamp(28px,4.4vw,52px);font-weight:600;l
 .step h3{font-family:var(--display);font-size:19px;font-weight:600;margin-top:36px;letter-spacing:-.02em}
 .step p{color:var(--muted);font-size:13.5px;margin-top:10px;flex:1}
 .step a{display:block;margin-top:14px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule);width:fit-content;font-size:13.5px}.step a:hover{border-bottom-color:var(--green)}
-@media(max-width:920px){.steps{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.steps{grid-template-columns:1fr}}
+.steps.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:920px){.steps,.steps.three{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.steps,.steps.three{grid-template-columns:minmax(0,1fr)}}
 .band{background:var(--dark);color:#ededed;border-radius:24px;padding:clamp(40px,6vw,80px) clamp(24px,4.5vw,64px);position:relative;overflow:hidden}
 .band .lead{color:rgba(237,237,237,.62)}.band .eyebrow{color:rgba(237,237,237,.5)}
 .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}

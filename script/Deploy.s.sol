@@ -2,8 +2,10 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Script.sol";
+import {IERC1155} from "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "../src/FixingOracle.sol";
 import "../src/ComputeToken.sol";
+import "../src/ComputeToken20.sol";
 import "../test/MockUSDC.sol";
 
 /// forge script script/Deploy.s.sol --rpc-url $MONAD_RPC --broadcast --private-key $DEPLOYER_KEY
@@ -66,7 +68,10 @@ contract Deploy is Script {
             token.issue(treasury, sid, sqty, "operator issuance: initial market liquidity, backed by the corpus treasury");
             console.log("issued", sqty, "of size", sid);
         }
+        // ERC-20 view of size 0 (shared-cpu-1x 256 MB) so it can list on Kuru's order book.
+        ComputeToken20 w = new ComputeToken20(IERC1155(address(token)), 0, "corpus s1-256 machine", "cS1-256");
         vm.stopBroadcast();
+        console.log("ComputeToken20", address(w));
         console.log("USDC        ", usdc);
         console.log("FixingOracle", address(oracle));
         console.log("ComputeToken", address(token));

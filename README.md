@@ -1,6 +1,6 @@
 # corpusAI on Monad
 
-Compute that pays you: own a corpus machine as a token on Monad. While held, jobs routed to the idle machine earn the holder yield; the token trades on its own value; and it redeems, any time, for a permanently funded machine whose principal is never spent. Underneath: a verifiable compute price oracle, x402 payments for prices in USDC on Monad, and a treasury that puts the float to work in Monad DeFi. Built for the Monad Metropolis hackathon, Track 4 (Trust, Identity and AI Infrastructure).
+Compute you own, yield you keep. Hold a corpus machine as a token on Monad. While held, jobs routed to the idle machine earn the holder yield; the token trades on its own value; and it redeems, any time, for a permanently funded machine whose principal is never spent. Underneath: a verifiable compute price oracle, x402 payments for prices in USDC on Monad, and a treasury that puts the float to work in Monad DeFi. Built for the Monad Metropolis hackathon, Track 4 (Trust, Identity and AI Infrastructure).
 
 **What it is.** Agents already pay [corpusAI Cloud Pricing](https://cloud.trycorpus.ai) per call for cloud, GPU and LLM token prices over x402. Since 1 October 2026 those calls settle in USDC on Monad through Monad's facilitator, and every index fixing the feed serves carries an EIP-712 signature by the corpusAI publisher key plus a daily on-chain attestation of the whole fixing set. This repository is the Monad side of that system:
 

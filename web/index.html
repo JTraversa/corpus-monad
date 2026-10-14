@@ -6,17 +6,17 @@
 <link rel="icon" href="/favicon.ico" sizes="32x32" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<title>corpusAI on Monad · Compute that pays you</title>
+<title>corpusAI on Monad · Compute you own, yield you keep</title>
 <meta name="description" content="corpusAI on Monad: own compute as a token. It earns yield from jobs routed to it while you hold it, trades on its own value, and redeems for the machine itself. Underneath, a verifiable compute price oracle, x402 payments for prices on Monad, and a treasury that puts the float to work in Monad DeFi." />
 <link rel="canonical" href="https://hackathon.trycorpus.ai/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="corpusAI" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:title" content="corpusAI on Monad · Compute that pays you" />
+<meta property="og:title" content="corpusAI on Monad · Compute you own, yield you keep" />
 <meta property="og:description" content="Own compute as a token on Monad: earn from jobs routed to it, trade it, or redeem it for the machine. A Monad Metropolis submission." />
 <meta property="og:url" content="https://hackathon.trycorpus.ai/" />
 <meta property="og:image" content="https://hackathon.trycorpus.ai/og.jpg" />
-<meta property="og:image:alt" content="The corpusAI mark, a ring around a green square." />
+<meta property="og:image:alt" content="The corpusAI and Monad coins in ink, over the headline: Compute you own. Yield you keep." />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="theme-color" content="#ebebeb" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,6 +43,11 @@ html.lock{overflow:hidden}
 .hero-content{position:absolute;inset:auto 0 clamp(24px,5vh,56px);color:var(--ink)}
 .hero-content .wrap{max-width:none;padding-inline:clamp(28px,5.5vw,88px);padding-left:calc(clamp(28px,5.5vw,88px) + 10vw)}
 .hero h1{margin-top:20px;font-size:clamp(40px,7.6vw,160px)}
+@media (max-width:600px){.hero h1{font-size:8.6vw}}
+/* The ink runs behind the headline for most of the loop; a feathered wash of the page colour keeps the copy legible
+   without boxing it. Sized to the copy, not the row, so the glow follows the text at every width. */
+.hero-copy{position:relative;display:inline-block;isolation:isolate}
+.hero-copy::before{content:"";position:absolute;inset:-22% -14%;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(235,235,235,.9),rgba(235,235,235,.78) 50%,rgba(235,235,235,.4) 78%,rgba(235,235,235,0))}
 .lockup{display:flex;align-items:center;gap:14px;margin-top:22px;font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.02em;opacity:0;transform:translateY(6px);transition:opacity 700ms ease 1500ms,transform 700ms ease 1500ms}
 html:not(.lock) .lockup{opacity:1;transform:none}
 .lockup svg{display:block}
@@ -54,7 +59,6 @@ html:not(.lock) .lockup{opacity:1;transform:none}
 .hero-sub .wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
 .hero-sub .hero-lead{text-align:center;margin-top:0}
 .hero-sub .actions{margin-top:0;justify-content:center}
-.strip-wrap{margin-top:14vh}
 @media(max-width:520px){.hero-content .wrap{padding-left:clamp(28px,5.5vw,88px)}.scroll-hint{display:none}.brand .on{font-size:0;gap:0}.brand .on svg{width:16px;height:16px}}
 </style>
 </head>
@@ -70,7 +74,6 @@ html:not(.lock) .lockup{opacity:1;transform:none}
     <a href="#how">how_it_connects</a>
     <a href="#facets">facets</a>
     <a href="#live">whats_live</a>
-    <a href="#disclosures">disclosures</a>
     <a href="https://github.com/JTraversa/corpus-monad" class="keep">github</a>
     <a href="/mint" class="nav-cta">mint_compute</a>
   </div>
@@ -79,12 +82,14 @@ html:not(.lock) .lockup{opacity:1;transform:none}
 <div class="page-root offset" id="pageRoot" style="transform:translateY(100vh)">
 <header class="hero">
   <div class="hero-content"><div class="wrap">
+    <div class="hero-copy">
     <p class="eyebrow">Monad Metropolis · Onchain finance and trading</p>
-    <h1>Compute<br>that pays you.</h1>
+    <h1>Compute you own.<br>Yield you keep.</h1>
     <div class="lockup" aria-label="corpusAI on Monad">
       <span style="display:flex;align-items:center;gap:10px"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>corpusAI</span>
       <span class="x">on</span>
       <span class="mon">Monad<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.782 0C8.37963 0 0 8.53443 0 11.9999C0 15.4654 8.37963 24 11.782 24C15.1844 24 23.5642 15.4653 23.5642 11.9999C23.5642 8.53458 15.1845 0 11.782 0ZM9.94598 18.8619C8.51124 18.4637 4.65378 11.5912 5.04481 10.1299C5.43584 8.66856 12.1834 4.73984 13.6181 5.1381C15.0529 5.5363 18.9104 12.4087 18.5194 13.87C18.1283 15.3314 11.3807 19.2602 9.94598 18.8619Z"/></svg></span>
+    </div>
     </div>
   </div></div>
   <span class="scroll-hint" aria-hidden="true">Scroll ↓</span>
@@ -92,26 +97,17 @@ html:not(.lock) .lockup{opacity:1;transform:none}
 
 <div class="page-sheet">
 <div class="hero-sub"><div class="wrap">
-  <p class="hero-lead">Own a machine as a token on Monad. While you hold it, jobs routed to the idle compute earn you yield. It trades on its own value. And whenever you want, you redeem it for the machine itself, permanently funded, principal never spent. Underneath: a compute price oracle any contract can verify, x402 payments for prices settled on Monad, and a treasury that puts the float to work in Monad DeFi.</p>
+  <p class="hero-lead">Own a machine as a token on Monad. Earn yield from jobs routed to your machine or speculate on deliverable compute.</p>
+  <p class="hero-lead">Underneath: a compute price oracle any contract can verify, x402 payments for prices settled on Monad, and a treasury that puts the float to work in Monad DeFi.</p>
   <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">Read the code</a><a class="btn ghost" href="https://cloud.trycorpus.ai">The price feed</a></div>
 </div></div>
 
-<section class="wrap strip-wrap"><div class="strip-card">
-  <div class="strip-bar"><span class="live">Live from the feed, the chain and the vault</span><span id="stamp">loading</span></div>
-  <div class="stats">
-    <div class="stat"><div class="stat-k">x402 offers on Monad</div><div class="stat-v" id="s-x402">…</div><div class="stat-c">USDC on <code>eip155:143</code> in every 402 the feed returns</div></div>
-    <div class="stat"><div class="stat-k">H100 SXM fixing</div><div class="stat-v" id="s-fix">…</div><div class="stat-c" id="s-fix-c">USD per GPU-hour, signed by the publisher</div></div>
-    <div class="stat"><div class="stat-k">Daily attestations</div><div class="stat-v" id="s-att">…</div><div class="stat-c" id="s-att-c">fixing sets attested on chain</div></div>
-    <div class="stat"><div class="stat-k">Treasury vault</div><div class="stat-v ok" id="s-vault">…</div><div class="stat-c" id="s-vault-c">Hyperithm USDC Apex on Morpho, net APY</div></div>
-  </div>
-</div></section>
-
 <section class="sec" id="owning" style="padding-bottom:0"><div class="wrap">
-  <div class="sec-head"><p class="eyebrow">Owning compute</p><h2>One token, three ways it pays.</h2><p class="lead">A rented machine is a cost. An owned machine is an asset. The token makes compute something you hold the way you hold a yield-bearing position: it works while idle, it trades, and it is still the machine.</p></div>
+  <div class="sec-head"><p class="eyebrow">Owning compute</p><h2>One token, three yield sources.</h2><p class="lead">A rented machine is a cost. An owned machine is an asset. The token makes compute something you hold the way you hold a yield-bearing position, deliverable any time you want to redeem it.</p></div>
   <div class="steps three">
-    <div class="step"><div class="step-n">yield</div><h3>Earn from jobs</h3><p>While a token is unredeemed its machine is idle. Jobs sent to the corpus network are routed to idle capacity and the fee accrues to the token holder. A forever GPU rental that earns while you wait. The job router is roadmap; the token and the accrual slot are built for it now.</p></div>
-    <div class="step"><div class="step-n">value</div><h3>Trade it</h3><p>The token is an ordinary ERC-1155 on Monad, backed by a principal that is never spent, and priced by the public oracle for the GPU sizes that follow. It can be held, sent or sold, and its value moves with compute prices and the yield it earns.</p></div>
-    <div class="step"><div class="step-n">compute</div><h3>Redeem it</h3><p>It is still a machine. Burn the token naming a corpus account and corpus opens the permanently funded position: the principal's yield pays the monthly bill for as long as it runs. Deliverable compute, not a claim on cash.</p></div>
+    <div class="step"><div class="step-n">01</div><h3>Job revenue</h3><p>While a token is unredeemed its machine is idle. Corpus then identifies spot tenants and redirects revenues to the token holder.</p></div>
+    <div class="step"><div class="step-n">02</div><h3>Interest</h3><p>The principal behind every token is never spent and never idle. It is routed into a curated USDC lending vault on Morpho on Monad, and that interest is what keeps the machine permanently funded: it pays the monthly bill for as long as the position runs.</p></div>
+    <div class="step"><div class="step-n">03</div><h3>Liquidity provision</h3><p>Tokenized VMs trade on a Kuru Orderbook against USDC, priced off the public compute oracle. Holders can quote both sides of the book or deposit into its backstop vault and earn the spread from traders moving in and out of compute.</p></div>
   </div>
   <p class="note">The yield-from-jobs leg applies first to GPU sizes, where idle capacity has a market. The Fly-sized machines in this proof of concept carry the token, the principal and the redemption; routing is the next build.</p>
 </div></section>
@@ -157,17 +153,6 @@ html:not(.lock) .lockup{opacity:1;transform:none}
   <p class="note">Ten tests across both contracts, including a real fixing signed by the production publisher key that the oracle must accept unchanged and reject with any edit.</p>
 </div></section>
 
-<section class="sec" id="disclosures" style="padding-top:0"><div class="wrap">
-  <div class="sec-head"><p class="eyebrow">Disclosures</p><h2>What was built when, and what is not built yet.</h2><p class="lead">Listed so nobody mistakes the demo for the product.</p></div>
-  <div class="gs">
-    <div class="g"><div class="g-c"><i></i>Built in the window</div><div class="g-m">The Monad x402 rail on the feed (1 Oct), EIP-712 fixing signatures and daily attestations (27 Sep), the hosted MCP server, FixingOracle, ComputeToken, the mint page, the clients and the treasury sweep (10 to 13 Oct 2026).</div></div>
-    <div class="g"><div class="g-c"><i></i>Pre-existing foundation</div><div class="g-m">The corpusAI Cloud Pricing feed (collectors, archive, index methodology, API) and the corpus compute platform on Ethereum with its deposit flow predate the hackathon. Everything here consumes the feed as an external service and points the existing deposit flow at Monad.</div></div>
-    <div class="g"><div class="g-c"><i></i>Not yet built</div><div class="g-m">The job router that sends work to idle machines and accrues the fee to the token holder, which is the yield leg. The corpus-api side of redemption: the wallet-to-account link, a positions ledger keyed by token, and the watcher that indexes <code>Redeemed</code> and opens the position. Also secondary liquidity, price hedging for GPU sizes, and the legal treatment of a tradeable, yield-bearing claim on a service.</div></div>
-    <div class="g"><div class="g-c"><i></i>Why Fly-sized VMs first</div><div class="g-m">Their bill is a catalog number set by corpus, and the position price follows from corpus's underwriting (k = 1.15, r = 7.24%), so none of the GPU forward dynamics apply yet. The oracle is the public price reference for the GPU sizes that come next.</div></div>
-    <div class="g"><div class="g-c"><i></i>Team and tools</div><div class="g-m">Julian Traversa and Alexandra, one team, one submission. Developed with AI assistance (Claude Code) under the team's direction; every design decision, key and deployment is the team's.</div></div>
-  </div>
-</div></section>
-
 <section class="wrap"><div class="cta">
   <p class="eyebrow">Try it</p>
   <h2>Own a machine that funds itself.</h2>
@@ -178,7 +163,7 @@ html:not(.lock) .lockup{opacity:1;transform:none}
 <footer><div class="wrap">
   <div class="f-top">
     <div><a class="brand" href="https://www.trycorpus.ai"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>corpusAI</a><p class="f-b">Permanently funded compute.</p></div>
-    <div class="f-col"><h4>This submission</h4><ul><li><a href="/mint">Mint compute</a></li><li><a href="https://github.com/JTraversa/corpus-monad">Source</a></li><li><a href="#disclosures">Disclosures</a></li></ul></div>
+    <div class="f-col"><h4>This submission</h4><ul><li><a href="/mint">Mint compute</a></li><li><a href="https://github.com/JTraversa/corpus-monad">Source</a></li></ul></div>
     <div class="f-col"><h4>corpusAI Cloud Pricing</h4><ul><li><a href="https://cloud.trycorpus.ai/charts">Charts</a></li><li><a href="https://cloud.trycorpus.ai/docs">API</a></li><li><a href="https://cloud.trycorpus.ai/x402">Pay per request (x402)</a></li><li><a href="https://cloud.trycorpus.ai/governance">Governance</a></li></ul></div>
     <div class="f-col"><h4>Contact</h4><ul><li><a href="mailto:hello@trycorpus.ai">hello@trycorpus.ai</a></li><li><a href="https://www.trycorpus.ai/terms">Terms</a></li><li><a href="https://www.trycorpus.ai/privacy">Privacy</a></li></ul></div>
   </div>
@@ -214,33 +199,11 @@ import { CONFIG } from '/config.js';
 const $ = (s) => document.querySelector(s);
 const short = (a) => a.slice(0, 6) + '…' + a.slice(-4);
 const addrLink = (a) => `<a href="${CONFIG.explorer}/address/${a}">${short(a)}</a>`;
-$('#stamp').textContent = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
 const mainLink = (a) => `<a href="${CONFIG.mainnetExplorer || CONFIG.explorer}/address/${a}">${short(a)}</a>`;
 if (CONFIG.treasury) $('#row-treasury td.addr').innerHTML = `treasury ${mainLink(CONFIG.treasury)} · vault ${mainLink(CONFIG.vault)} (mainnet)`;
 if (CONFIG.kuruMarket) { const tr = document.createElement('tr'); tr.innerHTML = `<td>cS1-256 / USDC on Kuru</td><td class="addr">market ${addrLink(CONFIG.kuruMarket)} · two asks at $620 and $632.40 (testnet)</td><td><span class="pill ok">listed</span></td>`; $('#row-token').after(tr); }
 if (CONFIG.oracle) { $('#row-oracle td.addr').innerHTML = `${addrLink(CONFIG.oracle)} · fixing relayed ${CONFIG.txs?.relay ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.relay}">tx</a>` : ''} (${CONFIG.chainName})`; $('#row-oracle .pill').outerHTML = '<span class="pill ok">live</span>'; }
 if (CONFIG.token) { $('#row-token td.addr').innerHTML = `${addrLink(CONFIG.token)} · mint ${CONFIG.txs?.mint ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.mint}">tx</a>` : ''} · redeem ${CONFIG.txs?.redeem ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.redeem}">tx</a>` : ''} (${CONFIG.chainName})`; $('#row-token .pill').outerHTML = '<span class="pill ok">live</span>'; }
-(async () => { try {
-  const r = await fetch(CONFIG.feed + '/v1/index/fixing?ticker=CX.H100SXM.NEO'); const j = await r.json();
-  const accepts = j.accepts || []; const monad = accepts.filter((a) => a.network === 'eip155:143');
-  $('#s-x402').textContent = monad.length + ' / ' + accepts.length;
-} catch { $('#s-x402').textContent = 'feed'; } })();
-(async () => { try {
-  const j = await (await fetch(CONFIG.feed + '/v1/attestations')).json();
-  $('#s-att').textContent = j.count ?? (j.attestations || []).length; const last = (j.attestations || []).at(-1) || (j.attestations || [])[0];
-  if (last?.day) $('#s-att-c').textContent = 'latest ' + last.day + ', on ' + (j.chain === 'eip155:8453' ? 'Base' : j.chain);
-  const day = last?.day; if (!day) return;
-  const f = await (await fetch(CONFIG.feed + '/attest/' + day + '.json')).json();
-  const find = (o) => { if (!o || typeof o !== 'object') return null; if (o.ticker === 'CX.H100SXM.NEO') return o; for (const v of Object.values(o)) { const h = find(v); if (h) return h; } return null; };
-  const h = find(f); if (!h) return;
-  const v = h.value ?? (h.valueE18 ? Number(BigInt(h.valueE18)) / 1e18 : null);
-  if (v != null) { $('#s-fix').textContent = '$' + Number(v).toFixed(2); $('#s-fix-c').textContent = 'USD per GPU-hour on ' + day + (h.n ? ', n = ' + h.n : ''); }
-} catch { /* leave placeholders */ } })();
-(async () => { try {
-  const r = await fetch('https://blue-api.morpho.org/graphql', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ query: `{ vaultV2ByAddress(address: "${CONFIG.vault}", chainId: 143) { netApy totalAssetsUsd } }` }) });
-  const v = (await r.json()).data?.vaultV2ByAddress; if (!v) return;
-  $('#s-vault').textContent = (v.netApy * 100).toFixed(2) + '%'; $('#s-vault-c').textContent = 'Hyperithm USDC Apex on Morpho, $' + (v.totalAssetsUsd / 1e6).toFixed(1) + 'M supplied';
-} catch { $('#s-vault').textContent = 'Morpho'; } })();
 </script>
 </body>
 </html>

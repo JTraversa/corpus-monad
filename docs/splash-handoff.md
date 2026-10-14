@@ -1,7 +1,7 @@
 # Splash handoff: a Monad variant of the corpus ink loop
 
 Written 2026-10-13 for rendering on a PC with Blender. The live hackathon page already runs the stock corpus splash
-(see "What is live now"); this is for an optional variant where a Monad element joins the mark in the animation itself.
+(see "What is live now"); this covers the variant where a Monad coin joins the corpus coin in the animation itself.
 
 ## What is live now
 
@@ -42,29 +42,37 @@ M9.94598 18.8619C8.51124 18.4637 4.65378 11.5912 5.04481 10.1299C5.43584 8.66856
 Brand colours on the current kit page: primary #6E54FF, #DDD7FE, #0E091C; the logomark asset itself is #836EF9.
 Use #836EF9 so the video matches the lockup on the page.
 
-### Suggested variant (least risk)
+### Implemented: two coins side by side (`--marks corpus monad`)
 
-Keep the corpus mark exactly as is for the 0–3 s hold. Add the Monad mark as a second body that forms *beside* the
-corpus mark (lockup spacing: marks on one baseline, gap ≈ 0.9·RING_R), purple-tinted, and let both burst together:
+`ink_sim.py` takes `--marks` (default `corpus`, which reproduces the original render exactly, same rng draw order).
+`--marks corpus monad` forms two coins on one baseline: the corpus coin (gray ring + green square) on the left and a
+Monad coin (gray ring + the logomark above as its core) on the right. Details:
 
-1. Rasterise the two paths above to a boolean mask (e.g. `matplotlib.path.Path` with even-odd, or `cairosvg` to a
-   PNG then threshold) at ~512 px; rejection-sample `n_monad ≈ 14 %` of N inside the mask, scale so the diamond's
-   height equals `2·RING_R`, offset `x += 2.6·RING_R`; shift the corpus mark `x -= 1.3·RING_R` so the pair is centred.
-2. Add a second tint channel (`tint_p`) and a second mix in the material toward #836EF9 (linear: 0.230, 0.158, 0.950);
-   seed `tint_p = uniform(0.55, 0.95)` on the Monad particles, extend `logo_mask` to include them.
-3. Burst/billow phases need no change; they act on `logo_mask`. Check the crossfade tail still condenses both marks.
-4. Render a 540p preview first (`--res 960 540 --points 200000 --samples 8`) to check composition before the
-   1080p/700k production render (hours on OptiX).
+- Pair geometry: `RING_R` drops 2.1 -> 1.75 so both fit, gap 0.9·RING_R, pair centred. The logomark is 1.2·RING_R
+  tall, rejection-sampled inside the path (cubics flattened in numpy, even-odd test; no extra deps in Blender).
+- Particle split per coin: ring 15 %, core 19 % (single coin keeps 24 % / 34 %); halo takes the rest less 10 % dust.
+- Colour: a second attribute `tint_p` and mix node toward an ink-dark #836EF9 (linear 0.080, 0.052, 0.360), darkened
+  the way the video's green is darkened from #1cc744. Full brand purple (0.230, 0.158, 0.950) read as a flat sticker
+  next to the green in the preview; swap it back in `mix_p` if exact brand match matters more.
+- Burst: each coin's particles are kicked radially from their own coin's centre, not frame centre.
+- Phone caveat: the video is `object-fit: cover`, so a portrait phone shows only the middle ~25-35 % of the frame
+  width; the pair is cropped there (the single coin already was, slightly).
 
-Alternative, cheaper on render time: leave the hold as is and only tint the billow's threaded colour from green toward
-purple over 3–9 s (`tint` ramp in the billow phase), so the Monad colour arrives with the burst rather than as a shape.
+Production render: same command as above plus `--marks corpus monad` (about 26 min on the RTX 3070 here,
+4.5 s/frame). Rendered and shipped to `web/media/` on 2026-10-13.
 
 ### Encode (same as production)
 
+The 348 rendered frames become a 300-frame loop: playback starts at frame 49 (mark already held), and the last 2 s
+crossfade the dust tail (frames 301-348) into frames 1-48, so the marks condense out of dust and the wrap lands on
+frame 49 seamlessly. A plain encode of all 348 frames hard-cuts from dust to the formed marks at the seam.
+
 ```
-ffmpeg -framerate 24 -i frames/%04d.png -vf "scale=1280:720,hqdn3d=1.5:1.5:6:6" -c:v libx264 -crf 28 -preset slow -pix_fmt yuv420p -movflags +faststart -an corpus_ink_loop.mp4
-ffmpeg -framerate 24 -i frames/%04d.png -vf "scale=960:540,hqdn3d=1.5:1.5:6:6"  -c:v libx264 -crf 30 -preset slow -pix_fmt yuv420p -movflags +faststart -an corpus_ink_loop_540.mp4
-ffmpeg -i corpus_ink_loop.mp4 -ss 1.5 -frames:v 1 -q:v 3 corpus_ink_poster.jpg   # the held mark(s)
+IN="-framerate 24 -start_number 49 -i frames/frame_%04d.png -framerate 24 -start_number 1 -i frames/frame_%04d.png"
+XF="[1:v]trim=end_frame=48[h];[0:v][h]xfade=transition=fade:duration=2:offset=10.5"
+ffmpeg $IN -filter_complex "$XF,scale=1280:720,hqdn3d=1.5:1.5:6:6" -c:v libx264 -crf 28 -preset slow -pix_fmt yuv420p -movflags +faststart -an corpus_ink_loop.mp4
+ffmpeg $IN -filter_complex "$XF,scale=960:540,hqdn3d=1.5:1.5:6:6"  -c:v libx264 -crf 30 -preset slow -pix_fmt yuv420p -movflags +faststart -an corpus_ink_loop_540.mp4
+ffmpeg -i corpus_ink_loop.mp4 -ss 0.4 -frames:v 1 -q:v 3 corpus_ink_poster.jpg   # the held mark(s); by 1.5 s the burst has begun
 ```
 Targets: 720p ≈ 9 MB / ~5.8 Mbps, 540p ≈ 2.5 MB. Check the loop seam by playing the file on repeat.
 

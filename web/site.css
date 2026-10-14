@@ -95,7 +95,7 @@ td .addr{word-break:normal;white-space:nowrap}
 .note{font-size:13px;color:var(--faint);margin-top:14px;max-width:70ch}
 /* mint page */
 .mint-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px;align-items:start}
-@media(max-width:900px){.mint-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:1180px){.mint-grid{grid-template-columns:minmax(0,1fr)}}
 .panel{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:22px}
 .panel h3{font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:-.02em}
 .panel p{color:var(--muted);font-size:13.5px;margin-top:8px}
@@ -114,3 +114,19 @@ input:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;borde
 .wallet .dot{width:8px;height:8px;border-radius:50%;background:var(--rule)}.wallet .dot.on{background:var(--green)}
 .tr-hold{font-family:var(--display);font-weight:600;font-variant-numeric:tabular-nums}
 .tr-hold.zero{color:var(--faint);font-weight:400}
+/* Sizes table on the mint page: fit the panel at laptop widths instead of scrolling the Mint column out of view. */
+#sizes{min-width:0;width:100%}
+#sizes th,#sizes td{padding:10px 10px}
+#sizes td:last-child,#sizes th:last-child{white-space:nowrap;padding-right:12px}
+#sizes td:first-child{min-width:9em}
+#sizes .btn.sm{padding:7px 13px}
+@media(max-width:560px){#sizes{min-width:520px}}
+/* Busy state for the mint and redeem buttons: a spinning ring in place of the label while a transaction is pending. */
+.btn.busy{position:relative;color:transparent!important;pointer-events:none;opacity:.85}
+.btn.busy::after{content:'';position:absolute;inset:0;margin:auto;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+.btn.ghost.busy::after{border-color:rgba(17,17,17,.2);border-top-color:var(--ink)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.log.pending{border-left:4px solid var(--green)}
+.log .step{display:block;color:rgba(237,237,237,.6)}
+.log .step.on{color:#ededed}
+.log .step.done{color:var(--green)}

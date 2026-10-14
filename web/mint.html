@@ -55,8 +55,8 @@
       <h3>Sizes</h3>
       <p>Fly-modeled machine sizes, priced as permanent positions: <span class="mono">price = k · C / r</span> with the monthly bill C, yield rate r of 7.24% and buffer k of 1.15, exactly as corpus quotes them. Outstanding is the number of machines minted and not yet redeemed.</p>
       <div class="tbl-wrap" style="margin-top:16px;border-radius:12px"><table id="sizes">
-        <thead><tr><th>Size</th><th class="num">Monthly bill</th><th class="num">Price, once</th><th class="num">Outstanding</th><th class="num">You hold</th><th></th></tr></thead>
-        <tbody id="rows"><tr><td colspan="6" class="addr">Waiting for the token address…</td></tr></tbody>
+        <thead><tr><th>Size</th><th class="num">Monthly bill</th><th class="num">Price, once</th><th class="num">Outstanding</th><th class="num">You hold</th></tr></thead>
+        <tbody id="rows"><tr><td colspan="5" class="addr">Waiting for the token address…</td></tr></tbody>
       </table></div>
       <p class="note" id="token-note"></p>
     </div>
@@ -72,7 +72,7 @@
       </div>
       <div class="panel" style="margin-top:20px">
         <h3>Redeem</h3>
-        <p>Burn tokens naming your corpus account reference (shown on the machine's Funding tab under "Redeem a compute token"). Then paste the transaction hash there and the machine is funded from the token.</p>
+        <p>The easy way: open your machine on <a href="https://www.trycorpus.ai/dashboard">the corpus dashboard</a>, choose "Redeem a compute token", and it redeems from your wallet with your account filled in. Use this form only to burn by hand with a reference you already have.</p>
         <div class="field"><label>Size</label><select id="r-id"></select></div>
         <div class="row" style="margin-top:14px">
           <div class="field" style="flex:0 0 90px;margin-top:0"><label>Quantity</label><input id="r-qty" type="number" min="1" value="1"></div>
@@ -124,7 +124,7 @@ if (!TOKEN) {
   log('ComputeToken is not deployed yet. The sizes and prices below are what the contract registers at deployment.');
   const split = (cents) => { const annual = BigInt(cents) * 12n; const r = (a, b) => (a + b / 2n) / b; return { principal: r(annual * 10000n, 724n) * 10000n, price: r(annual * 11500n, 724n) * 10000n }; };
   types = CATALOG.map(([slug, label, cents], id) => ({ id, slug, label, monthly: BigInt(cents) * 10000n, ...split(cents), active: false, supply: 0n, held: 0n }));
-  $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">—</td><td class="num tr-hold zero">0</td><td class="num"><button class="btn sm" disabled>Mint</button></td></tr>`).join('');
+  $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">—</td><td class="num tr-hold zero">0</td></tr>`).join('');
   const opts = types.map((t) => `<option value="${t.id}">${t.label} · ${money(t.price)}</option>`).join(''); $('#m-id').innerHTML = opts; $('#r-id').innerHTML = opts; $('#m-id').value = '2'; $('#r-id').value = '2'; total();
 }
 else $('#token-note').innerHTML = `ComputeToken <a href="${CONFIG.explorer}/address/${TOKEN}" class="mono">${TOKEN}</a> on ${CONFIG.chainName}. Payments use the testnet mock USDC at <span class="mono">${CONFIG.usdc}</span>; ask hello@trycorpus.ai for test balance. Two s1-256 tokens were operator-issued to seed the Kuru market.`;
@@ -139,8 +139,8 @@ async function load() {
     const b = me ? await pub.readContract({ address: TOKEN, abi, functionName: 'balanceOf', args: [me, BigInt(id)] }) : 0n; if (me) await pause(70);
     types.push({ id, slug: t[0], label: t[1], monthly: t[2], principal: t[3], price: t[4], active: t[5], supply: s, held: b });
   }
-  $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">${t.supply}</td><td class="num tr-hold ${t.held === 0n ? 'zero' : ''}">${t.held}</td><td class="num"><button class="btn sm" data-id="${t.id}" ${me && t.active ? '' : 'disabled'}>Mint</button></td></tr>`).join('');
-  document.querySelectorAll('button[data-id]').forEach((b) => b.onclick = () => { $('#m-id').value = b.dataset.id; total(); mint(); });
+  $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">${t.supply}</td><td class="num tr-hold ${t.held === 0n ? 'zero' : ''}">${t.held}</td></tr>`).join('');
+  document.querySelectorAll('#rows tr').forEach((tr, i) => { tr.style.cursor = 'pointer'; tr.title = 'Select this size in the mint panel'; tr.onclick = () => { $('#m-id').value = String(types[i].id); $('#r-id').value = String(types[i].id); total(); }; });
   const opts = types.map((t) => `<option value="${t.id}">${t.label} · ${money(t.price)}</option>`).join('');
   const keepM = $('#m-id').value, keepR = $('#r-id').value;
   $('#m-id').innerHTML = opts; $('#r-id').innerHTML = opts;
@@ -150,30 +150,39 @@ async function load() {
 function total() { const t = types[+$('#m-id').value]; const qty = BigInt(Math.max(1, +$('#m-qty').value || 1)); $('#m-total').textContent = t ? money(t.price * qty) : '—'; }
 $('#m-id').onchange = total; $('#m-qty').oninput = total;
 
-async function send(fn, what) {
+const busy = (sel, on) => { const b = $(sel); b.classList.toggle('busy', on); b.disabled = on || !me; };
+const steps = (list, current, doneCount) => { $('#log').classList.add('pending'); $('#log').innerHTML = list.map((t, i) => `<span class="step ${i < doneCount ? 'done' : i === current ? 'on' : ''}">${i < doneCount ? '✓' : i === current ? '…' : '·'} ${t}</span>`).join(''); };
+async function send(fn, what, onSent) {
   const { request } = await pub.simulateContract({ ...fn, account: me });
-  const hash = await wal.writeContract(request); log(`${what} sent ${txLink(hash)}. Waiting for Monad…`);
+  const hash = await wal.writeContract(request); if (onSent) onSent(hash);
   const rc = await pub.waitForTransactionReceipt({ hash }); if (rc.status !== 'success') throw new Error(what + ' reverted'); return hash;
 }
-async function mint() { try {
+async function mint() { busy('#mint', true); try {
   const t = types[+$('#m-id').value]; const qty = BigInt(Math.max(1, +$('#m-qty').value || 1)); const cost = t.price * qty;
   const usdc = await pub.readContract({ address: TOKEN, abi, functionName: 'usdc' });
   const bal = await pub.readContract({ address: usdc, abi: erc20, functionName: 'balanceOf', args: [me] });
-  if (bal < cost) return log(`You hold ${money(bal)} USDC on Monad and this mint costs ${money(cost)}.`);
+  if (bal < cost) { log(`You hold ${money(bal)} USDC on Monad and this mint costs ${money(cost)}.`); return; }
   const allowance = await pub.readContract({ address: usdc, abi: erc20, functionName: 'allowance', args: [me, TOKEN] });
-  let approveTx; if (allowance < cost) approveTx = await send({ address: usdc, abi: erc20, functionName: 'approve', args: [TOKEN, cost] }, 'Approval');
-  const tx = await send({ address: TOKEN, abi, functionName: 'mint', args: [BigInt(t.id), qty] }, 'Mint');
+  const needApprove = allowance < cost;
+  const list = [...(needApprove ? ['Approve USDC in your wallet', 'Approval confirming on Monad'] : []), 'Confirm the mint in your wallet', 'Mint confirming on Monad'];
+  let step = 0; steps(list, step, 0);
+  let approveTx;
+  if (needApprove) { approveTx = await send({ address: usdc, abi: erc20, functionName: 'approve', args: [TOKEN, cost] }, 'Approval', () => { step = 1; steps(list, step, 1); }); step = 2; steps(list, step, 2); }
+  const tx = await send({ address: TOKEN, abi, functionName: 'mint', args: [BigInt(t.id), qty] }, 'Mint', () => { step += 1; steps(list, step, step); });
+  $('#log').classList.remove('pending');
   log(`Minted ${qty} × ${t.label} for ${money(cost)}.${approveTx ? ' Approval ' + txLink(approveTx) + '.' : ''} Mint ${txLink(tx)}. The principal and buffer are in the treasury; the token is in your wallet.`); load();
-} catch (e) { log('Error: ' + (e.shortMessage || e.message)); } }
+} catch (e) { $('#log').classList.remove('pending'); log('Error: ' + (e.shortMessage || e.message)); } finally { busy('#mint', false); } }
 $('#mint').onclick = mint;
-$('#redeem').onclick = async () => { try {
+$('#redeem').onclick = async () => { busy('#redeem', true); try {
   const t = types[+$('#r-id').value]; const qty = BigInt(Math.max(1, +$('#r-qty').value || 1)); const acct = $('#r-acct').value.trim();
-  if (!acct) return log('Name the corpus account that should receive the machine.');
-  if (t.held < qty) return log(`You hold ${t.held} of ${t.label}.`);
+  if (!acct) { log('Name the corpus account that should receive the machine.'); return; }
+  if (t.held < qty) { log(`You hold ${t.held} of ${t.label}.`); return; }
   const ref = keccak256(toHex(acct));
-  const tx = await send({ address: TOKEN, abi, functionName: 'redeem', args: [BigInt(t.id), qty, ref] }, 'Redeem');
+  const list = ['Confirm the redeem in your wallet', 'Redeem confirming on Monad']; steps(list, 0, 0);
+  const tx = await send({ address: TOKEN, abi, functionName: 'redeem', args: [BigInt(t.id), qty, ref] }, 'Redeem', () => steps(list, 1, 1));
+  $('#log').classList.remove('pending');
   log(`Redeemed ${qty} × ${t.label} to account reference <span class="mono">${ref.slice(0, 18)}…</span>. ${txLink(tx)}. corpus opens the position from this event.`); load();
-} catch (e) { log('Error: ' + (e.shortMessage || e.message)); } };
+} catch (e) { $('#log').classList.remove('pending'); log('Error: ' + (e.shortMessage || e.message)); } finally { busy('#redeem', false); } };
 $('#connect').onclick = async () => { try {
   if (!window.ethereum) return log('No wallet found. Install a browser wallet that supports custom EVM chains, then reload.');
   wal = createWalletClient({ chain, transport: custom(window.ethereum) });

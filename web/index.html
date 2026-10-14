@@ -59,6 +59,15 @@ html:not(.lock) .lockup{opacity:1;transform:none}
 .hero-sub .wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
 .hero-sub .hero-lead{text-align:center;margin-top:0}
 .hero-sub .actions{margin-top:0;justify-content:center}
+.me{display:flex;align-items:center;gap:clamp(20px,3vw,36px);background:var(--panel);border:1px solid var(--rule);border-radius:24px;padding:clamp(20px,3vw,32px);margin-bottom:clamp(48px,7vw,88px)}
+.me img{flex:none;width:clamp(88px,12vw,132px);height:auto;aspect-ratio:1;border-radius:18px;display:block}
+.me h3{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.02em;margin-top:10px}
+.me p.bio{color:var(--muted);font-size:15px;line-height:1.55;margin-top:8px;max-width:62ch}
+.me ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;padding:0;font-family:var(--mono);font-size:13px}
+.me ul a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule)}.me ul a:hover{border-color:var(--green)}
+.me>div{min-width:0}.me ul a{overflow-wrap:anywhere}
+.me ul span{color:var(--faint);margin-right:6px}
+@media(max-width:560px){.me{flex-direction:column;align-items:flex-start}}
 @media(max-width:520px){.hero-content .wrap{padding-left:clamp(28px,5.5vw,88px)}.scroll-hint{display:none}.brand .on{font-size:0;gap:0}.brand .on svg{width:16px;height:16px}}
 </style>
 </head>
@@ -158,6 +167,21 @@ html:not(.lock) .lockup{opacity:1;transform:none}
   <h2>Own a machine that funds itself.</h2>
   <p class="lead">A shared-cpu-1x with 1 GB costs $5.70 a month. Its permanent position is $1,086.46, paid once in USDC on Monad. Hold it, let it earn, send it to a friend, or redeem it.</p>
   <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">GitHub</a></div>
+</div></section>
+
+<section class="wrap" id="builder"><div class="me">
+  <img src="/media/julian.jpg" width="320" height="320" alt="Julian Traversa's pixel-art avatar" loading="lazy" />
+  <div>
+    <p class="eyebrow">Who built this</p>
+    <h3>Julian Traversa</h3>
+    <p class="bio">Founder of corpusAI. Ten years building financial infrastructure: fixed rates, oracles, MEV and rebalancing. Co-author of EIP-4626. Based in Miami and NYC.</p>
+    <ul>
+      <li><span>web</span><a href="https://traversa.dev">traversa.dev</a></li>
+      <li><span>x</span><a href="https://x.com/TraversaJulian">@TraversaJulian</a></li>
+      <li><span>tg</span><a href="https://t.me/traversajulian">@traversajulian</a></li>
+      <li><span>mail</span><a href="mailto:julian@traversa.dev">julian@traversa.dev</a></li>
+    </ul>
+  </div>
 </div></section>
 
 <footer><div class="wrap">

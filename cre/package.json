@@ -1,0 +1,9 @@
+{
+  "name": "corpus-cre-relay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Chainlink CRE workflow: fetch the signed corpusAI fixing from the feed, verify the publisher's EIP-712 signature, and write it to FixingOracle on Monad through a receiver.",
+  "dependencies": { "@chainlink/cre-sdk": "^1.23.0", "viem": "^2.0.0" },
+  "devDependencies": { "typescript": "^5" }
+}

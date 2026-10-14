@@ -1,0 +1,9 @@
+{
+  "schedule": "0 10 0 * * *",
+  "feedUrl": "https://cloud.trycorpus.ai/v1/index/fixing?ticker=CX.H100SXM.NEO",
+  "chainSelectorName": "monad-testnet",
+  "receiver": "0xe38729aedb2866AD136dbEBfc1bA62fc95e5Ac77",
+  "publisher": "0x1b77aE05cd23C514A1De304b6b771513f6eFa780",
+  "gasLimit": "400000",
+  "write": false
+}

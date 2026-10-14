@@ -127,6 +127,6 @@ input:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;borde
 .btn.ghost.busy::after{border-color:rgba(17,17,17,.2);border-top-color:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .log.pending{border-left:4px solid var(--green)}
-.log .step{display:block;color:rgba(237,237,237,.6)}
-.log .step.on{color:#ededed}
+.log .step{display:block;color:rgba(237,237,237,.92)}
+.log .step.on{color:#fff;font-weight:500}
 .log .step.done{color:var(--green)}

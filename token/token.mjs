@@ -8,7 +8,7 @@ import { createPublicClient, createWalletClient, http, parseAbi, formatUnits, ke
 import { privateKeyToAccount } from 'viem/accounts';
 
 const chainId = +(process.env.CHAIN_ID || 143);
-const chain = { id: chainId, name: chainId === 143 ? 'Monad' : 'Monad Testnet', nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [process.env.MONAD_RPC || (chainId === 143 ? 'https://rpc.monad.xyz' : 'https://testnet-rpc.monad.xyz')] } } };
+const chain = { id: chainId, name: chainId === 143 ? 'Monad' : 'Monad Testnet', nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [process.env.MONAD_RPC || (process.env.ALCHEMY_KEY ? `https://monad-${chainId === 143 ? 'mainnet' : 'testnet'}.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}` : (chainId === 143 ? 'https://rpc.monad.xyz' : 'https://testnet-rpc.monad.xyz'))] } } };
 const TOKEN = process.env.TOKEN; if (!TOKEN) { console.error('TOKEN=0x... required'); process.exit(2); }
 export const abi = parseAbi([
   'function usdc() view returns (address)', 'function treasury() view returns (address)', 'function typeCount() view returns (uint256)',

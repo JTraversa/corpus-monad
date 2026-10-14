@@ -3,8 +3,11 @@
 //
 //   DEPLOYER_KEY=0x... TOKEN=0x... WRAPPER=0x... node market.mjs --qty 2 --ask 620 [--rpc URL] [--market 0x...]
 //   node market.mjs --status --market 0x...                      read the book (no key)
-import { ethers } from 'ethers';
+import { createRequire } from 'node:module';
 import * as KuruSdk from '@kuru-labs/kuru-sdk';
+// Use the SDK's own ethers instance so its instanceof checks (Signer vs Provider) see our wallet.
+const require = createRequire(import.meta.url);
+const { ethers } = require(require.resolve('ethers', { paths: [require.resolve('@kuru-labs/kuru-sdk')] }));
 
 const args = process.argv.slice(2); const has = (f) => args.includes(f); const after = (f, d) => (args.includes(f) ? args[args.indexOf(f) + 1] : d);
 const RPC = after('--rpc', process.env.MONAD_RPC || 'https://rpc.monad.xyz');
@@ -37,9 +40,13 @@ const id = (await wrapper.id()).toNumber();
 
 // 1. wrap: ERC-1155 -> ERC-20
 const held1155 = (await token.balanceOf(me, id)).toBigInt();
-if (held1155 < qty) { console.error(`hold ${held1155} of size ${id}, need ${qty}`); process.exit(1); }
-if (!(await token.isApprovedForAll(me, WRAPPER))) out.txs.approve1155 = (await (await token.setApprovalForAll(WRAPPER, true)).wait()).transactionHash;
-out.txs.wrap = (await (await wrapper.wrap(qty)).wait()).transactionHash;
+const alreadyWrapped = (await wrapper.balanceOf(me)).toBigInt() / 10n ** 18n;
+if (alreadyWrapped >= qty) console.error('already wrapped', alreadyWrapped.toString());
+else {
+  if (held1155 < qty) { console.error(`hold ${held1155} of size ${id}, need ${qty}`); process.exit(1); }
+  if (!(await token.isApprovedForAll(me, WRAPPER))) out.txs.approve1155 = (await (await token.setApprovalForAll(WRAPPER, true)).wait()).transactionHash;
+  out.txs.wrap = (await (await wrapper.wrap(qty)).wait()).transactionHash; console.error('wrapped', out.txs.wrap);
+}
 const baseUnits = (await wrapper.balanceOf(me)).toString(); out.wrapped = ethers.utils.formatUnits(baseUnits, 18);
 
 // 2. market: create cS1-256 / USDC on the Router (type 0 = two ERC-20s), unless --market is given
@@ -50,14 +57,14 @@ if (!market) {
   const prec = pc.calculatePrecisions(ask, 1, ask * 20, 0.01, 10);
   out.marketParams = { pricePrecision: prec.pricePrecision.toString(), sizePrecision: prec.sizePrecision.toString(), tickSize: prec.tickSize.toString(), minSize: prec.minSize.toString(), maxSize: prec.maxSize.toString() };
   market = await pc.deployMarket(signer, KURU.router, 0, WRAPPER, USDC, prec.sizePrecision, prec.pricePrecision, prec.tickSize, prec.minSize, prec.maxSize, 30, 10, ethers.BigNumber.from(30));
-  out.marketCreated = true;
+  out.marketCreated = true; console.error('market', market);
 }
 out.market = market;
 const p = await KuruSdk.ParamFetcher.getMarketParams(provider, market);
 
 // 3. deposit the wrapped tokens into the margin account and post asks: half at `ask`, half 2 % higher.
 const dep = await KuruSdk.MarginDeposit.deposit(signer, KURU.margin, me, WRAPPER, out.wrapped, 18, true);
-out.txs.deposit = dep.transactionHash;
+out.txs.deposit = dep.transactionHash; console.error('deposited', dep.transactionHash);
 const n = Number(qty); const lots = n === 1 ? [[ask, 1]] : [[ask, Math.ceil(n / 2)], [+(ask * 1.02).toFixed(2), Math.floor(n / 2)]];
 out.asks = [];
 for (const [price, size] of lots) {

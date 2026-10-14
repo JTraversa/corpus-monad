@@ -67,8 +67,8 @@ html:not(.lock) .lockup{opacity:1;transform:none}
   </a>
   <div class="nav-links">
     <a href="#owning">owning_compute</a>
-    <a href="#facets">facets</a>
     <a href="#how">how_it_connects</a>
+    <a href="#facets">facets</a>
     <a href="#live">whats_live</a>
     <a href="#disclosures">disclosures</a>
     <a href="https://github.com/JTraversa/corpus-monad" class="keep">github</a>
@@ -116,17 +116,7 @@ html:not(.lock) .lockup{opacity:1;transform:none}
   <p class="note">The yield-from-jobs leg applies first to GPU sizes, where idle capacity has a market. The Fly-sized machines in this proof of concept carry the token, the principal and the redemption; routing is the next build.</p>
 </div></section>
 
-<section class="sec" id="facets"><div class="wrap">
-  <div class="sec-head"><p class="eyebrow">Four facets</p><h2>One system, four pieces, all on Monad.</h2><p class="lead">Each piece runs on its own. Together they make compute something an agent can price, pay for, hold and redeem without an account on either side.</p></div>
-  <div class="steps">
-    <div class="step"><div class="step-n">[ 01 ]</div><h3>Pay for prices</h3><p>cloud.trycorpus.ai serves spot, on-demand, reserved and GPU prices across providers, 29 priced endpoints and 35 MCP tools. Every 402 carries a USDC offer on Monad, settled by the Monad facilitator with no API key on either side. An agent pays a cent, gets the price back signed.</p><a href="https://cloud.trycorpus.ai/x402">How x402 works on the feed</a></div>
-    <div class="step"><div class="step-n">[ 02 ]</div><h3>Verify them on chain</h3><p>Each day the feed publishes index fixings, EIP-712 signed by the corpusAI publisher key and attested on chain. FixingOracle on Monad checks that signature, so anyone can relay a fixing and nobody can forge one. Any contract can read the H100 price.</p><a href="https://cloud.trycorpus.ai/governance">Governance and the signing scheme</a></div>
-    <div class="step"><div class="step-n">[ 03 ]</div><h3>Own compute</h3><p>ComputeToken is an ERC-1155 where one token is one permanently funded corpus machine, priced by corpus's own underwriting: principal plus buffer, so the yield covers the bill. The holder earns from jobs routed to the idle machine, can trade the token, and can redeem it for the position at any time.</p><a href="/mint">Mint a machine</a></div>
-    <div class="step"><div class="step-n">[ 04 ]</div><h3>Put the float to work</h3><p>Mint payments land in the treasury and are swept into a curated USDC lending vault on Morpho, with Aave v3 as fallback, instead of sitting idle. The yield subsidises the compute. Withdraw when the hosting bills fall due.</p><a href="https://github.com/JTraversa/corpus-monad/tree/main/treasury">The treasury sweep</a></div>
-  </div>
-</div></section>
-
-<section class="sec" id="how" style="padding-top:0"><div class="wrap"><div class="band">
+<section class="sec" id="how"><div class="wrap"><div class="band">
   <p class="eyebrow">How it connects</p>
   <h2>From a price to a machine.</h2>
   <p class="lead">The same USDC on Monad moves through every step. The oracle is the public reference for what compute costs; the token is the claim on it; the treasury is where the money waits.</p>
@@ -139,6 +129,16 @@ html:not(.lock) .lockup{opacity:1;transform:none}
   <p class="band-note">Why Monad: 400 ms blocks and sub-second finality make per-call settlement feel like an ordinary API round trip, and the USDC agents pay with is the same asset Morpho, Aave and Euler lend on Monad, so the float never has to leave the chain.</p>
 </div></div></section>
 
+<section class="sec" id="facets" style="padding-top:0"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Four facets</p><h2>One system, four pieces, all on Monad.</h2><p class="lead">Each piece runs on its own. Together they make compute something an agent can price, pay for, hold and redeem without an account on either side.</p></div>
+  <div class="steps">
+    <div class="step"><div class="step-n">[ 01 ]</div><h3>Pay for prices</h3><p>cloud.trycorpus.ai serves spot, on-demand, reserved and GPU prices across providers, 29 priced endpoints and 35 MCP tools. Every 402 carries a USDC offer on Monad, settled by the Monad facilitator with no API key on either side. An agent pays a cent, gets the price back signed.</p><a href="https://cloud.trycorpus.ai/x402">How x402 works on the feed</a></div>
+    <div class="step"><div class="step-n">[ 02 ]</div><h3>Verify them on chain</h3><p>Each day the feed publishes index fixings, EIP-712 signed by the corpusAI publisher key and attested on chain. FixingOracle on Monad checks that signature, so anyone can relay a fixing and nobody can forge one. Any contract can read the H100 price.</p><a href="https://cloud.trycorpus.ai/governance">Governance and the signing scheme</a></div>
+    <div class="step"><div class="step-n">[ 03 ]</div><h3>Own compute</h3><p>ComputeToken is an ERC-1155 where one token is one permanently funded corpus machine, priced by corpus's own underwriting: principal plus buffer, so the yield covers the bill. The holder earns from jobs routed to the idle machine, can trade the token, and can redeem it for the position at any time.</p><a href="/mint">Mint a machine</a></div>
+    <div class="step"><div class="step-n">[ 04 ]</div><h3>Put the float to work</h3><p>Mint payments land in the treasury and are swept into a curated USDC lending vault on Morpho, with Aave v3 as fallback, instead of sitting idle. The yield subsidises the compute. Withdraw when the hosting bills fall due.</p><a href="https://github.com/JTraversa/corpus-monad/tree/main/treasury">The treasury sweep</a></div>
+  </div>
+</div></section>
+
 <section class="sec" id="live" style="padding-top:0"><div class="wrap">
   <div class="sec-head"><p class="eyebrow">What is live</p><h2>Everything here is real and callable.</h2><p class="lead">Addresses fill in as contracts are deployed. Each row links to the thing itself, not to a description of it.</p></div>
   <div class="tbl-wrap"><table>
@@ -148,8 +148,8 @@ html:not(.lock) .lockup{opacity:1;transform:none}
       <tr><td>A paid call on Monad</td><td><code>curl -i "https://cloud.trycorpus.ai/v1/index/fixing?ticker=CX.H100SXM.NEO"</code></td><td><span class="pill ok">402 carries eip155:143</span></td></tr>
       <tr><td>Daily attestations of the fixing set</td><td><a href="https://cloud.trycorpus.ai/v1/attestations">/v1/attestations</a></td><td><span class="pill ok">live</span></td></tr>
       <tr><td>Hosted MCP server</td><td><a href="https://cloud.trycorpus.ai/.well-known/mcp.json">cloud.trycorpus.ai/mcp</a></td><td><span class="pill ok">live</span></td></tr>
-      <tr id="row-oracle"><td>FixingOracle on Monad</td><td class="addr">pending deployment</td><td><span class="pill soon">deploying</span></td></tr>
-      <tr id="row-token"><td>ComputeToken on Monad</td><td class="addr">pending deployment</td><td><span class="pill soon">deploying</span></td></tr>
+      <tr id="row-oracle"><td>FixingOracle</td><td class="addr">pending deployment</td><td><span class="pill soon">deploying</span></td></tr>
+      <tr id="row-token"><td>ComputeToken</td><td class="addr">pending deployment</td><td><span class="pill soon">deploying</span></td></tr>
       <tr id="row-treasury"><td>Treasury and vault position</td><td class="addr"></td><td><span class="pill ok">Morpho · Hyperithm USDC Apex</span></td></tr>
       <tr><td>Source, tests, clients</td><td><a href="https://github.com/JTraversa/corpus-monad">github.com/JTraversa/corpus-monad</a></td><td><span class="pill">MIT</span></td></tr>
     </tbody>
@@ -215,9 +215,11 @@ const $ = (s) => document.querySelector(s);
 const short = (a) => a.slice(0, 6) + '…' + a.slice(-4);
 const addrLink = (a) => `<a href="${CONFIG.explorer}/address/${a}">${short(a)}</a>`;
 $('#stamp').textContent = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
-if (CONFIG.treasury) $('#row-treasury td.addr').innerHTML = `treasury ${addrLink(CONFIG.treasury)} · vault ${addrLink(CONFIG.vault)}`;
-if (CONFIG.oracle) { $('#row-oracle td.addr').innerHTML = addrLink(CONFIG.oracle); $('#row-oracle .pill').outerHTML = '<span class="pill ok">live</span>'; }
-if (CONFIG.token) { $('#row-token td.addr').innerHTML = addrLink(CONFIG.token); $('#row-token .pill').outerHTML = '<span class="pill ok">live</span>'; }
+const mainLink = (a) => `<a href="${CONFIG.mainnetExplorer || CONFIG.explorer}/address/${a}">${short(a)}</a>`;
+if (CONFIG.treasury) $('#row-treasury td.addr').innerHTML = `treasury ${mainLink(CONFIG.treasury)} · vault ${mainLink(CONFIG.vault)} (mainnet)`;
+if (CONFIG.kuruMarket) { const tr = document.createElement('tr'); tr.innerHTML = `<td>cS1-256 / USDC on Kuru</td><td class="addr">market ${addrLink(CONFIG.kuruMarket)} · two asks at $620 and $632.40 (testnet)</td><td><span class="pill ok">listed</span></td>`; $('#row-token').after(tr); }
+if (CONFIG.oracle) { $('#row-oracle td.addr').innerHTML = `${addrLink(CONFIG.oracle)} · fixing relayed ${CONFIG.txs?.relay ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.relay}">tx</a>` : ''} (${CONFIG.chainName})`; $('#row-oracle .pill').outerHTML = '<span class="pill ok">live</span>'; }
+if (CONFIG.token) { $('#row-token td.addr').innerHTML = `${addrLink(CONFIG.token)} · mint ${CONFIG.txs?.mint ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.mint}">tx</a>` : ''} · redeem ${CONFIG.txs?.redeem ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.redeem}">tx</a>` : ''} (${CONFIG.chainName})`; $('#row-token .pill').outerHTML = '<span class="pill ok">live</span>'; }
 (async () => { try {
   const r = await fetch(CONFIG.feed + '/v1/index/fixing?ticker=CX.H100SXM.NEO'); const j = await r.json();
   const accepts = j.accepts || []; const monad = accepts.filter((a) => a.network === 'eip155:143');

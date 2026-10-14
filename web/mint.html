@@ -47,7 +47,7 @@
 <section class="wrap" style="padding-bottom:clamp(64px,9vw,120px)">
   <div class="strip-card" style="margin-bottom:20px"><div class="strip-bar">
     <span class="wallet"><span class="dot" id="dot"></span><span id="who">Not connected</span></span>
-    <span class="row"><span id="chainlabel">Monad · chain 143</span><button class="btn sm" id="connect">Connect wallet</button></span>
+    <span class="row"><span id="chainlabel">Monad Testnet · chain 10143</span><button class="btn sm" id="connect">Connect wallet</button></span>
   </div></div>
 
   <div class="mint-grid">
@@ -72,11 +72,11 @@
       </div>
       <div class="panel" style="margin-top:20px">
         <h3>Redeem</h3>
-        <p>Burn tokens and name the corpus account that should receive the positions. corpus indexes the event and opens them.</p>
+        <p>Burn tokens naming your corpus account reference (shown on the machine's Funding tab under "Redeem a compute token"). Then paste the transaction hash there and the machine is funded from the token.</p>
         <div class="field"><label>Size</label><select id="r-id"></select></div>
         <div class="row" style="margin-top:14px">
           <div class="field" style="flex:0 0 90px;margin-top:0"><label>Quantity</label><input id="r-qty" type="number" min="1" value="1"></div>
-          <div class="field" style="flex:1;margin-top:0"><label>corpus account</label><input id="r-acct" placeholder="account id or email"></div>
+          <div class="field" style="flex:1;margin-top:0"><label>corpus account reference</label><input id="r-acct" placeholder="corpus:<account id>, from your machine's Funding tab"></div>
         </div>
         <div class="actions" style="margin-top:18px"><button class="btn ghost" id="redeem" disabled>Burn and provision</button></div>
       </div>
@@ -108,6 +108,7 @@ import { CONFIG } from '/config.js';
 import { createPublicClient, createWalletClient, custom, http, parseAbi, formatUnits, keccak256, toHex } from 'https://esm.sh/viem@2';
 const q = new URLSearchParams(location.search);
 const TOKEN = q.get('token') || CONFIG.token;
+if (q.get('acct')) { document.querySelector('#r-acct').value = q.get('acct'); }
 const chain = { id: CONFIG.chainId, name: CONFIG.chainName, nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [CONFIG.rpc] } }, blockExplorers: { default: { name: 'Monad Explorer', url: CONFIG.explorer } } };
 const abi = parseAbi(['function usdc() view returns (address)','function typeCount() view returns (uint256)','function types(uint256) view returns (string,string,uint256,uint256,uint256,bool)','function totalSupply(uint256) view returns (uint256)','function balanceOf(address,uint256) view returns (uint256)','function mint(uint256,uint256) returns (uint256)','function redeem(uint256,uint256,bytes32)']);
 const erc20 = parseAbi(['function allowance(address,address) view returns (uint256)','function approve(address,uint256) returns (bool)','function balanceOf(address) view returns (uint256)']);
@@ -126,16 +127,16 @@ if (!TOKEN) {
   $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">—</td><td class="num tr-hold zero">0</td><td class="num"><button class="btn sm" disabled>Mint</button></td></tr>`).join('');
   const opts = types.map((t) => `<option value="${t.id}">${t.label} · ${money(t.price)}</option>`).join(''); $('#m-id').innerHTML = opts; $('#r-id').innerHTML = opts; $('#m-id').value = '2'; $('#r-id').value = '2'; total();
 }
-else $('#token-note').innerHTML = `ComputeToken <a href="${CONFIG.explorer}/address/${TOKEN}" class="mono">${TOKEN}</a> on ${CONFIG.chainName}.`;
+else $('#token-note').innerHTML = `ComputeToken <a href="${CONFIG.explorer}/address/${TOKEN}" class="mono">${TOKEN}</a> on ${CONFIG.chainName}. Payments use the testnet mock USDC at <span class="mono">${CONFIG.usdc}</span>; ask hello@trycorpus.ai for test balance. Two s1-256 tokens were operator-issued to seed the Kuru market.`;
 
 async function load() {
   if (!TOKEN) return;
   const n = Number(await pub.readContract({ address: TOKEN, abi, functionName: 'typeCount' })); types = [];
+  const pause = (ms) => new Promise((r) => setTimeout(r, ms)); // the public Monad RPC allows 15 requests a second
   for (let id = 0; id < n; id++) {
-    const [t, s, b] = await Promise.all([
-      pub.readContract({ address: TOKEN, abi, functionName: 'types', args: [BigInt(id)] }),
-      pub.readContract({ address: TOKEN, abi, functionName: 'totalSupply', args: [BigInt(id)] }),
-      me ? pub.readContract({ address: TOKEN, abi, functionName: 'balanceOf', args: [me, BigInt(id)] }) : Promise.resolve(0n)]);
+    const t = await pub.readContract({ address: TOKEN, abi, functionName: 'types', args: [BigInt(id)] }); await pause(70);
+    const s = await pub.readContract({ address: TOKEN, abi, functionName: 'totalSupply', args: [BigInt(id)] }); await pause(70);
+    const b = me ? await pub.readContract({ address: TOKEN, abi, functionName: 'balanceOf', args: [me, BigInt(id)] }) : 0n; if (me) await pause(70);
     types.push({ id, slug: t[0], label: t[1], monthly: t[2], principal: t[3], price: t[4], active: t[5], supply: s, held: b });
   }
   $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">${t.supply}</td><td class="num tr-hold ${t.held === 0n ? 'zero' : ''}">${t.held}</td><td class="num"><button class="btn sm" data-id="${t.id}" ${me && t.active ? '' : 'disabled'}>Mint</button></td></tr>`).join('');

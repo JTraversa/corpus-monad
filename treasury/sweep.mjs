@@ -16,7 +16,7 @@ export const USDC = '0x754704Bc059F8C67012fEd69BC8A327a5aafb603';
 export const MORPHO_VAULT = '0x78999cc96d2Ba0341588C60CcB0E91c6C33CF371'; // Hyperithm USDC Apex (hyperUSDCa)
 export const AAVE = { POOL: '0x69a5F9AD4f96ebf0a0C792dD42a01cC5C0102fef', A_USDC: '0x35a73BAcb179d3740395A3ceCc87FF2e581d6042' };
 
-const chain = { id: 143, name: 'Monad', nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [process.env.MONAD_RPC || 'https://rpc.monad.xyz'] } } };
+const chain = { id: 143, name: 'Monad', nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [process.env.MONAD_RPC || (process.env.ALCHEMY_KEY ? `https://monad-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}` : 'https://rpc.monad.xyz')] } } };
 const erc20 = parseAbi(['function balanceOf(address) view returns (uint256)', 'function allowance(address,address) view returns (uint256)', 'function approve(address,uint256) returns (bool)']);
 const erc4626 = parseAbi([
   'function deposit(uint256 assets, address receiver) returns (uint256)',

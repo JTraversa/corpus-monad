@@ -7,7 +7,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 
 const args = process.argv.slice(2); const flag = (n) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : null; };
 const chainId = +(process.env.CHAIN_ID || 10143);
-const chain = { id: chainId, name: chainId === 143 ? 'Monad' : 'Monad Testnet', nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [process.env.MONAD_RPC || (chainId === 143 ? 'https://rpc.monad.xyz' : 'https://testnet-rpc.monad.xyz')] } } };
+const chain = { id: chainId, name: chainId === 143 ? 'Monad' : 'Monad Testnet', nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [process.env.MONAD_RPC || (process.env.ALCHEMY_KEY ? `https://monad-${chainId === 143 ? 'mainnet' : 'testnet'}.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}` : (chainId === 143 ? 'https://rpc.monad.xyz' : 'https://testnet-rpc.monad.xyz'))] } } };
 const abi = parseAbi([
   'struct Fixing { string ticker; string day; uint256 valueE18; uint32 n; string methodology; }',
   'function post((string ticker,string day,uint256 valueE18,uint32 n,string methodology) f, bytes sig)',

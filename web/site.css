@@ -91,6 +91,7 @@ footer{border-top:1px solid var(--rule);padding:48px 0 36px;font-size:13px;color
 @media(max-width:520px){.f-top{grid-template-columns:1fr;gap:28px}}
 code,.mono{font-family:var(--mono);font-size:.92em}
 .addr{font-family:var(--mono);font-size:12px;color:var(--muted);word-break:break-all}
+td .addr{word-break:normal;white-space:nowrap}
 .note{font-size:13px;color:var(--faint);margin-top:14px;max-width:70ch}
 /* mint page */
 .mint-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px;align-items:start}

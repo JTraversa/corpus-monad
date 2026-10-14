@@ -1,0 +1,9 @@
+{
+  "name": "corpus-privy-mint",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": { "build": "vite build", "dev": "vite" },
+  "dependencies": { "@privy-io/react-auth": "^2", "react": "^19", "react-dom": "^19", "viem": "^2" },
+  "devDependencies": { "@vitejs/plugin-react": "^4", "vite": "^6" }
+}

@@ -108,8 +108,8 @@ input:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;borde
 .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:14px;border-top:1px solid var(--rule)}
 .total b{font-family:var(--display);font-size:26px;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .total span{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
-.log{font-family:var(--mono);font-size:12.5px;line-height:1.55;background:var(--dark);color:#ededed;border-radius:14px;padding:16px 18px;margin-top:16px;white-space:pre-wrap;word-break:break-word;min-height:4.5em}
-.log a{color:var(--green)}
+.log{font-family:var(--mono);font-size:12.5px;line-height:1.55;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;margin-top:16px;white-space:pre-wrap;word-break:break-word;min-height:4.5em}
+.log a{color:var(--green-text)}
 .wallet{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
 .wallet .dot{width:8px;height:8px;border-radius:50%;background:var(--rule)}.wallet .dot.on{background:var(--green)}
 .tr-hold{font-family:var(--display);font-weight:600;font-variant-numeric:tabular-nums}
@@ -127,6 +127,6 @@ input:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;borde
 .btn.ghost.busy::after{border-color:rgba(17,17,17,.2);border-top-color:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .log.pending{border-left:4px solid var(--green)}
-.log .step{display:block;color:rgba(237,237,237,.92)}
-.log .step.on{color:#fff;font-weight:500}
-.log .step.done{color:var(--green)}
+.log .step{display:block;color:var(--muted)}
+.log .step.on{color:var(--ink);font-weight:600}
+.log .step.done{color:var(--green-text)}

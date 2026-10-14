@@ -37,6 +37,15 @@ contract Deploy is Script {
         priceCents = divRound(annual * BUFFER_K_BPS, YIELD_RATE_BPS);
     }
 
+    function parseSeed(string memory s) internal pure returns (uint256 id, uint256 qty) {
+        bytes memory b = bytes(s); bool afterColon;
+        for (uint256 i = 0; i < b.length; i++) {
+            if (b[i] == ":") { afterColon = true; continue; }
+            uint256 d = uint8(b[i]) - 48; require(d < 10, "SEED_ISSUE");
+            if (afterColon) qty = qty * 10 + d; else id = id * 10 + d;
+        }
+    }
+
     function run() external {
         address publisher = vm.envOr("PUBLISHER", address(0x1b77aE05cd23C514A1De304b6b771513f6eFa780));
         address usdc = vm.envOr("USDC", address(0x754704Bc059F8C67012fEd69BC8A327a5aafb603));
@@ -49,6 +58,13 @@ contract Deploy is Script {
         for (uint256 i = 0; i < s.length; i++) {
             (uint256 principalCents, uint256 priceCents) = split(s[i].cents);
             token.registerType(s[i].slug, s[i].label, s[i].cents * 10_000, principalCents * 10_000, priceCents * 10_000); // cents -> 6-decimal USDC
+        }
+        // SEED_ISSUE="<id>:<qty>" issues operator tokens to the treasury without payment (e.g. "0:2" to seed a market).
+        string memory seed = vm.envOr("SEED_ISSUE", string(""));
+        if (bytes(seed).length > 0) {
+            (uint256 sid, uint256 sqty) = parseSeed(seed);
+            token.issue(treasury, sid, sqty, "operator issuance: initial market liquidity, backed by the corpus treasury");
+            console.log("issued", sqty, "of size", sid);
         }
         vm.stopBroadcast();
         console.log("USDC        ", usdc);

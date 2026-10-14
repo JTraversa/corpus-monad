@@ -38,6 +38,8 @@ contract ComputeToken is ERC1155, ERC1155Supply {
     event PriceSet(uint256 indexed id, uint256 monthlyUsdc, uint256 principalUsdc, uint256 priceUsdc, bool active);
     event Minted(address indexed buyer, uint256 indexed id, uint256 qty, uint256 paidUsdc);
     event Redeemed(address indexed holder, uint256 indexed id, uint256 qty, bytes32 indexed accountRef);
+    event Issued(address indexed to, uint256 indexed id, uint256 qty, string note);
+    uint256 public issuedTotal; // tokens created by the operator without a mint payment (see `issue`)
 
     error NotOperator();
     error UnknownType();
@@ -86,6 +88,17 @@ contract ComputeToken is ERC1155, ERC1155Supply {
         if (qty == 0) revert ZeroQty();
         _burn(msg.sender, id, qty);
         emit Redeemed(msg.sender, id, qty, accountRef);
+    }
+
+    /// @notice Operator issuance without payment: tokens corpus underwrites from its own treasury, for seeding a
+    /// market or granting compute. Counted in `issuedTotal` and announced in `Issued` so the unpaid share of the
+    /// outstanding supply is always visible on chain. Redeemable exactly like a minted token.
+    function issue(address to, uint256 id, uint256 qty, string calldata note) external onlyOperator {
+        if (id >= types.length) revert UnknownType();
+        if (qty == 0) revert ZeroQty();
+        issuedTotal += qty;
+        _mint(to, id, qty, "");
+        emit Issued(to, id, qty, note);
     }
 
     function typeCount() external view returns (uint256) { return types.length; }

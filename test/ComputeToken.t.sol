@@ -67,6 +67,17 @@ contract ComputeTokenTest is Test {
         assertApproxEqAbs(principal * 724 / 10_000 / 12, monthly, 10); // within 0.00001 USDC of the bill
     }
 
+    function test_operatorIssueIsCountedAndRedeemable() public {
+        token.issue(bob, S1_1G, 2, "seed");
+        assertEq(token.balanceOf(bob, S1_1G), 2);
+        assertEq(token.issuedTotal(), 2);
+        assertEq(usdc.balanceOf(treasury), 0); // no payment
+        vm.prank(bob); token.redeem(S1_1G, 1, keccak256("acct"));
+        assertEq(token.totalSupply(S1_1G), 1);
+        vm.prank(alice); vm.expectRevert(ComputeToken.NotOperator.selector);
+        token.issue(alice, S1_1G, 1, "nope");
+    }
+
     function test_mintNeedsPayment() public {
         vm.prank(bob); vm.expectRevert();
         token.mint(S1_1G, 1);

@@ -5,3 +5,5 @@ broadcast/*/31337/
 .env.*
 node_modules/
 .vercel/
+.vercel
+.env*
